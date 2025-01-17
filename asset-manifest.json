@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/MelissaFlowers/static/css/main.293f68e8.css",
-    "main.js": "/MelissaFlowers/static/js/main.6197406b.js",
+    "main.js": "/MelissaFlowers/static/js/main.a68b7576.js",
     "static/media/GerveraYRosas.png": "/MelissaFlowers/static/media/GerveraYRosas.eac8b6ae5743de9061ee.png",
     "static/media/logo.png": "/MelissaFlowers/static/media/logo.b9e1c61d5d5409c1bdc6.png",
     "static/media/background.png": "/MelissaFlowers/static/media/background.ed376321dce4c3ef14bb.png",
@@ -15,10 +15,10 @@
     "static/media/bouquee.webp": "/MelissaFlowers/static/media/bouquee.acb35e839b8959fe6b2d.webp",
     "index.html": "/MelissaFlowers/index.html",
     "main.293f68e8.css.map": "/MelissaFlowers/static/css/main.293f68e8.css.map",
-    "main.6197406b.js.map": "/MelissaFlowers/static/js/main.6197406b.js.map"
+    "main.a68b7576.js.map": "/MelissaFlowers/static/js/main.a68b7576.js.map"
   },
   "entrypoints": [
     "static/css/main.293f68e8.css",
-    "static/js/main.6197406b.js"
+    "static/js/main.a68b7576.js"
   ]
 }
