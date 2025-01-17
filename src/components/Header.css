@@ -1,0 +1,72 @@
+/* Base styles for all devices */
+.header {
+  display: flex;
+  flex-direction: column; /* Default for mobile */
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  border-bottom: 3px solid black;
+  border-top: 3px solid black;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+  background-color: #f5eee6;
+  background-image: url("../assets/background.png");
+  background-size: 90%;
+  background-position: center;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-family: "Dancing Script", cursive;
+}
+
+.header-contact {
+  display: flex;
+  flex-direction: column; /* Default for mobile */
+  gap: 0.5rem;
+}
+
+.header-address,
+.header-phone {
+  margin: 0;
+  font-weight: bold;
+}
+
+.header-title {
+  color: #d15ea1;
+  font-size: 80px;
+}
+
+.logo-image {
+  width: 22rem;
+  height: 22rem;
+}
+
+/* Media query for desktop */
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row; /* Horizontal layout for desktop */
+    justify-content: space-between;
+    text-align: left;
+    padding: 2rem 2rem;
+    padding-left: 10rem;
+    padding-right: 5rem;
+  }
+
+  .header-title {
+    font-size: 5rem;
+    margin-bottom: 0; /* Align title with contact info */
+    color: #ce3995;
+  }
+
+  .header-contact {
+    flex-direction: column; /* Align address and phone horizontally */
+    align-items: end;
+  }
+
+  .logo-image {
+    width: 18rem;
+    height: 18rem;
+  }
+}
