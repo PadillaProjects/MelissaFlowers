@@ -1,9 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.08fb2a4d.css",
-    "main.js": "/static/js/main.992014f1.js",
+    "main.js": "/static/js/main.c2ae0a31.js",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.eac8b6ae5743de9061ee.png",
-    "static/media/logo.png": "/static/media/logo.b9e1c61d5d5409c1bdc6.png",
     "static/media/background.png": "/static/media/background.ed376321dce4c3ef14bb.png",
     "static/media/Rosas2.JPG": "/static/media/Rosas2.66ccc9b7516f2ee09d7a.JPG",
     "static/media/Rosas3.JPG": "/static/media/Rosas3.9884fa482f6836e6fa30.JPG",
@@ -15,10 +14,10 @@
     "static/media/bouquee.webp": "/static/media/bouquee.acb35e839b8959fe6b2d.webp",
     "index.html": "/index.html",
     "main.08fb2a4d.css.map": "/static/css/main.08fb2a4d.css.map",
-    "main.992014f1.js.map": "/static/js/main.992014f1.js.map"
+    "main.c2ae0a31.js.map": "/static/js/main.c2ae0a31.js.map"
   },
   "entrypoints": [
     "static/css/main.08fb2a4d.css",
-    "static/js/main.992014f1.js"
+    "static/js/main.c2ae0a31.js"
   ]
 }
