@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/%3CMelissaFlowers%3E/static/css/main.39a7339a.css",
+    "main.js": "/%3CMelissaFlowers%3E/static/js/main.75be18e8.js",
+    "static/media/GerveraYRosas.png": "/%3CMelissaFlowers%3E/static/media/GerveraYRosas.eac8b6ae5743de9061ee.png",
+    "static/media/logo.png": "/%3CMelissaFlowers%3E/static/media/logo.b9e1c61d5d5409c1bdc6.png",
+    "static/media/background.png": "/%3CMelissaFlowers%3E/static/media/background.ed376321dce4c3ef14bb.png",
+    "static/media/Rosas2.JPG": "/%3CMelissaFlowers%3E/static/media/Rosas2.66ccc9b7516f2ee09d7a.JPG",
+    "static/media/Rosas3.JPG": "/%3CMelissaFlowers%3E/static/media/Rosas3.9884fa482f6836e6fa30.JPG",
+    "static/media/Gerveras1.JPG": "/%3CMelissaFlowers%3E/static/media/Gerveras1.cf90e69bc4295c55f96c.JPG",
+    "static/media/Gerveras2.JPG": "/%3CMelissaFlowers%3E/static/media/Gerveras2.8b86e80a915e758741e0.JPG",
+    "static/media/Gerveras4.JPG": "/%3CMelissaFlowers%3E/static/media/Gerveras4.040e9abf3913d7d7c3a8.JPG",
+    "static/media/Rosas1.JPG": "/%3CMelissaFlowers%3E/static/media/Rosas1.6e73bde0ccd7a8ba0461.JPG",
+    "static/media/Gerveras3.JPG": "/%3CMelissaFlowers%3E/static/media/Gerveras3.f6a8387a38df738f1b68.JPG",
+    "static/media/bouquee.webp": "/%3CMelissaFlowers%3E/static/media/bouquee.acb35e839b8959fe6b2d.webp",
+    "index.html": "/%3CMelissaFlowers%3E/index.html",
+    "main.39a7339a.css.map": "/%3CMelissaFlowers%3E/static/css/main.39a7339a.css.map",
+    "main.75be18e8.js.map": "/%3CMelissaFlowers%3E/static/js/main.75be18e8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.39a7339a.css",
+    "static/js/main.75be18e8.js"
+  ]
+}
