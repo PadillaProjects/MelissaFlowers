@@ -1,23 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.09fcb61c.css",
-    "main.js": "/static/js/main.d7d28b46.js",
-    "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.eac8b6ae5743de9061ee.png",
+    "main.js": "/static/js/main.eb5b6070.js",
+    "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.614e0b0d943305330bd2.png",
     "static/media/background.png": "/static/media/background.ed376321dce4c3ef14bb.png",
-    "static/media/Rosas2.JPG": "/static/media/Rosas2.66ccc9b7516f2ee09d7a.JPG",
-    "static/media/Rosas3.JPG": "/static/media/Rosas3.9884fa482f6836e6fa30.JPG",
-    "static/media/Gerveras1.JPG": "/static/media/Gerveras1.cf90e69bc4295c55f96c.JPG",
-    "static/media/Gerveras2.JPG": "/static/media/Gerveras2.8b86e80a915e758741e0.JPG",
-    "static/media/Gerveras4.JPG": "/static/media/Gerveras4.040e9abf3913d7d7c3a8.JPG",
-    "static/media/Rosas1.JPG": "/static/media/Rosas1.6e73bde0ccd7a8ba0461.JPG",
-    "static/media/Gerveras3.JPG": "/static/media/Gerveras3.f6a8387a38df738f1b68.JPG",
-    "static/media/bouquee.webp": "/static/media/bouquee.acb35e839b8959fe6b2d.webp",
+    "static/media/Gerveras2.png": "/static/media/Gerveras2.7311770f1895a5458488.png",
+    "static/media/Gerveras1.png": "/static/media/Gerveras1.e664c1c47b21ae650c58.png",
+    "static/media/Rosas2.png": "/static/media/Rosas2.13feac8482e635f101c7.png",
+    "static/media/Rosas1.png": "/static/media/Rosas1.e79f74a211556bf5da53.png",
     "index.html": "/index.html",
     "main.09fcb61c.css.map": "/static/css/main.09fcb61c.css.map",
-    "main.d7d28b46.js.map": "/static/js/main.d7d28b46.js.map"
+    "main.eb5b6070.js.map": "/static/js/main.eb5b6070.js.map"
   },
   "entrypoints": [
     "static/css/main.09fcb61c.css",
-    "static/js/main.d7d28b46.js"
+    "static/js/main.eb5b6070.js"
   ]
 }
