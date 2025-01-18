@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.08fb2a4d.css",
-    "main.js": "/static/js/main.c2ae0a31.js",
+    "main.css": "/static/css/main.5212f5f4.css",
+    "main.js": "/static/js/main.2359b372.js",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.eac8b6ae5743de9061ee.png",
     "static/media/background.png": "/static/media/background.ed376321dce4c3ef14bb.png",
     "static/media/Rosas2.JPG": "/static/media/Rosas2.66ccc9b7516f2ee09d7a.JPG",
@@ -13,11 +13,11 @@
     "static/media/Gerveras3.JPG": "/static/media/Gerveras3.f6a8387a38df738f1b68.JPG",
     "static/media/bouquee.webp": "/static/media/bouquee.acb35e839b8959fe6b2d.webp",
     "index.html": "/index.html",
-    "main.08fb2a4d.css.map": "/static/css/main.08fb2a4d.css.map",
-    "main.c2ae0a31.js.map": "/static/js/main.c2ae0a31.js.map"
+    "main.5212f5f4.css.map": "/static/css/main.5212f5f4.css.map",
+    "main.2359b372.js.map": "/static/js/main.2359b372.js.map"
   },
   "entrypoints": [
-    "static/css/main.08fb2a4d.css",
-    "static/js/main.c2ae0a31.js"
+    "static/css/main.5212f5f4.css",
+    "static/js/main.2359b372.js"
   ]
 }
