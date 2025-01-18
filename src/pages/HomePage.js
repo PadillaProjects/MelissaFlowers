@@ -1,15 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ItemCard from "../components/ItemCard";
-import bouquee from "../assets/bouquee.webp";
 import gerverayrosas from "../assets/GerveraYRosas.png";
-import rosas1 from "../assets/Rosas1.JPG";
-import rosas2 from "../assets/Rosas2.JPG";
-import rosas3 from "../assets/Rosas3.JPG";
-import Gerveras1 from "../assets/Gerveras1.JPG";
-import Gerveras2 from "../assets/Gerveras2.JPG";
-import Gerveras3 from "../assets/Gerveras3.JPG";
-import Gerveras4 from "../assets/Gerveras4.JPG";
+import rosas1 from "../assets/Rosas1.png";
+import rosas2 from "../assets/Rosas2.png";
+import Gerveras1 from "../assets/Gerveras1.png";
+import Gerveras2 from "../assets/Gerveras2.png";
 import "./HomePage.css";
 
 const HomePage = () => {
@@ -23,13 +19,13 @@ const HomePage = () => {
     {
       id: 2,
       name: "Eterno Romance",
-      images: [rosas1, rosas2, rosas3],
+      images: [rosas1, rosas2],
       description: "Rosas",
     },
     {
       id: 3,
       name: "Colores de Corazón",
-      images: [Gerveras1, Gerveras2, Gerveras3, Gerveras4],
+      images: [Gerveras1, Gerveras2],
       description: "Gerveras",
     },
   ];
