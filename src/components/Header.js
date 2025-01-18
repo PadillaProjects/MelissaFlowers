@@ -1,6 +1,7 @@
 // Header.js
 import React from "react";
 import "./Header.css"; // CSS for styling the Header
+import { FaInstagram } from "react-icons/fa";
 
 const Header = () => {
   return (
@@ -11,9 +12,23 @@ const Header = () => {
 
       <h1 className="header-title">Melissa's Gallery</h1>
       <div className="header-contact">
-        <p className="header-address">1234 Number Street</p>
-        <p className="header-address">El Paso, TX, 79999</p>
-        <p className="header-phone">TEL: (915) 456-7890</p>
+        <p className="header-address"></p>
+        <p className="header-address">El Paso, TX</p>
+        <p className="header-phone"></p>
+        <a
+          href="https://www.instagram.com/melissa_soto3/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            textDecoration: "none",
+            color: "#E4405F",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <FaInstagram size={24} style={{ marginRight: "8px" }} />
+          melissa_soto3
+        </a>
       </div>
     </header>
   );

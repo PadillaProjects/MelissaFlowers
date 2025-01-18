@@ -69,4 +69,8 @@
     width: 18rem;
     height: 18rem;
   }
+
+  .header-address {
+    margin-right: 45px;
+  }
 }

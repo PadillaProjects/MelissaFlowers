@@ -22,19 +22,16 @@ const HomePage = () => {
     },
     {
       id: 2,
-      name: "Rosas",
+      name: "Eterno Romance",
       images: [rosas1, rosas2, rosas3],
       description: "Rosas",
     },
     {
       id: 3,
-      name: "Gerveras",
+      name: "Colores de Corazón",
       images: [Gerveras1, Gerveras2, Gerveras3, Gerveras4],
       description: "Gerveras",
     },
-    { id: 4, name: "Item 4", images: [bouquee], description: "lipsum" },
-    { id: 5, name: "Item 5", images: [bouquee], description: "lipsum" },
-    { id: 6, name: "Item 6", images: [bouquee], description: "lipsum" },
   ];
 
   return (
