@@ -16,6 +16,7 @@ const ItemCard = ({ item }) => {
     // Close modal only if clicking outside the image
     if (e.target.classList.contains("modal-backdrop")) {
       setIsEnlarged(false);
+      setCurrentImageIndex(0);
     }
   };
 
