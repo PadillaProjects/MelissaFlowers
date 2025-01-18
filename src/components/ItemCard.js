@@ -64,6 +64,17 @@ const ItemCard = ({ item }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            {/* Counter for image index */}
+            <motion.div
+              className="image-counter"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {`${currentImageIndex + 1} / ${item.images.length}`}
+            </motion.div>
+
             <motion.img
               className="enlarged-image"
               src={item.images[currentImageIndex]} // Show the first image

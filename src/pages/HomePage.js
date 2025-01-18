@@ -17,7 +17,7 @@ const HomePage = () => {
     {
       id: 1,
       name: "Gerveras con Rosas",
-      images: [gerverayrosas, bouquee],
+      images: [gerverayrosas],
       description: "Gerveras con Rosas",
     },
     {
