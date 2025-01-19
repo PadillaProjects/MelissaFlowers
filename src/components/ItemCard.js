@@ -14,7 +14,10 @@ const ItemCard = ({ item }) => {
 
   const handleClose = (e) => {
     // Close modal only if clicking outside the image
-    if (e.target.classList.contains("modal-backdrop")) {
+    if (
+      e.target.classList.contains("modal-backdrop") ||
+      e.target.classList.contains("back-arrow")
+    ) {
       setIsEnlarged(false);
       setCurrentImageIndex(0);
     }
@@ -87,6 +90,18 @@ const ItemCard = ({ item }) => {
               whileTap={{ scale: 0.9 }}
               onClick={handleClick}
             />
+
+            {/* Back arrow to close the modal */}
+            <motion.div
+              className="back-arrow"
+              onClick={handleClose}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              ← Back
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
