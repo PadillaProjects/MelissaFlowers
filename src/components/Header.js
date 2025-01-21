@@ -14,8 +14,9 @@ const Header = () => {
       <div className="header-contact">
         <p className="header-address"></p>
         <p className="header-address">El Paso, TX</p>
-        <p className="header-phone"></p>
+        <p className="header-phone">Text: 915-207-4262</p>
         <a
+          className="instagram"
           href="https://www.instagram.com/melissa_soto3/"
           target="_blank"
           rel="noopener noreferrer"

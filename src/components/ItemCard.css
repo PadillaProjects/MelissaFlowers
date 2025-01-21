@@ -14,6 +14,25 @@
   color: #991032;
   margin: 0;
   margin-top: 20px;
+  background: linear-gradient(
+    90deg,
+    rgb(255, 130, 130),
+    rgb(255, 0, 102),
+    rgb(255, 130, 130)
+  );
+  background-size: 200% 100%; /* Makes the gradient larger to create the moving stripe */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-animation 3s infinite linear;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 150% 0%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 
 .item-price {
@@ -40,7 +59,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 182, 193, 0.865); /* Pinkish backdrop */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 193, 0.865) 0%,
+    rgba(162, 70, 84, 0.865) 50%,
+    rgba(255, 182, 193, 0.865) 100%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,6 +76,7 @@
   max-height: 95%;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: black solid 5px;
 }
 
 .image-counter {

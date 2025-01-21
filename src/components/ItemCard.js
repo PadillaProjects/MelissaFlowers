@@ -112,7 +112,9 @@ const ItemCard = ({ item }) => {
                   whileTap={{ scale: 0.9 }}
                   onClick={handleClick}
                 />
-                <div className="tap-text">Tap image for next</div>
+                {!(item.images.length === 1) && (
+                  <div className="tap-text">Tap image for next image</div>
+                )}
               </>
             )}
 
