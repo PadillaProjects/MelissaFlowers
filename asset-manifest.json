@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.f117b96e.css",
-    "main.js": "/static/js/main.84a4a9dd.js",
+    "main.css": "/static/css/main.7006f74f.css",
+    "main.js": "/static/js/main.d3cfe0d1.js",
     "static/media/AmorEterno2.png": "/static/media/AmorEterno2.54d2da3c3c78fa6a0eb9.png",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.614e0b0d943305330bd2.png",
     "static/media/background.png": "/static/media/background.ed376321dce4c3ef14bb.png",
@@ -17,11 +17,11 @@
     "static/media/CanastaFestiva.png": "/static/media/CanastaFestiva.6603af6e59a038a69767.png",
     "static/media/CanastaFestiva2.png": "/static/media/CanastaFestiva2.8daa86a00e8d2aa7f2e3.png",
     "index.html": "/index.html",
-    "main.f117b96e.css.map": "/static/css/main.f117b96e.css.map",
-    "main.84a4a9dd.js.map": "/static/js/main.84a4a9dd.js.map"
+    "main.7006f74f.css.map": "/static/css/main.7006f74f.css.map",
+    "main.d3cfe0d1.js.map": "/static/js/main.d3cfe0d1.js.map"
   },
   "entrypoints": [
-    "static/css/main.f117b96e.css",
-    "static/js/main.84a4a9dd.js"
+    "static/css/main.7006f74f.css",
+    "static/js/main.d3cfe0d1.js"
   ]
 }
