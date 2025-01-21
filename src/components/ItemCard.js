@@ -8,6 +8,8 @@ const ItemCard = ({ item }) => {
 
   const [isEnlarged, setIsEnlarged] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleEnlarge = () => {
     setIsEnlarged(true); // Open modal
   };
@@ -25,7 +27,13 @@ const ItemCard = ({ item }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % item.images.length);
+
+    // Do not proceed if there is only one image
+    if (item.images.length <= 1) return;
+
+    setIsLoading(true); // Start loading
+    const nextIndex = (currentImageIndex + 1) % item.images.length;
+    setCurrentImageIndex(nextIndex);
   };
 
   useEffect(() => {
@@ -40,6 +48,14 @@ const ItemCard = ({ item }) => {
       document.body.style.overflow = "auto";
     };
   }, [isEnlarged]);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = item.images[currentImageIndex];
+    image.onload = () => {
+      setIsLoading(false); // Finish loading
+    };
+  }, [currentImageIndex, item.images]);
 
   return (
     <>
@@ -57,6 +73,7 @@ const ItemCard = ({ item }) => {
           ></img>
         </div>
         <h3 className="item-name">{item.name}</h3>
+        <h4 className="item-price">{item.price}</h4>
       </motion.div>
 
       <AnimatePresence>
@@ -79,17 +96,25 @@ const ItemCard = ({ item }) => {
               {`${currentImageIndex + 1} / ${item.images.length}`}
             </motion.div>
 
-            <motion.img
-              className="enlarged-image"
-              src={item.images[currentImageIndex]} // Show the first image
-              alt={item.name}
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.5 }}
-              transition={{ duration: 0.3 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleClick}
-            />
+            {/* Loading spinner */}
+            {isLoading && <div className="loading-spinner">Loading...</div>}
+
+            {!isLoading && (
+              <>
+                <motion.img
+                  className="enlarged-image"
+                  src={item.images[currentImageIndex]} // Show the current image
+                  alt={item.name}
+                  initial={{ scale: 0.5 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.5 }}
+                  transition={{ duration: 0.3 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleClick}
+                />
+                <div className="tap-text">Tap image for next</div>
+              </>
+            )}
 
             {/* Back arrow to close the modal */}
             <motion.div

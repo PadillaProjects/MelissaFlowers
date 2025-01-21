@@ -13,6 +13,7 @@ import SolEterno from "../assets/SolEterno.png";
 import SolEterno2 from "../assets/SolEterno2.png";
 import CanastaFestiva from "../assets/CanastaFestiva.png";
 import CanastaFestiva2 from "../assets/CanastaFestiva2.png";
+import LoveRose from "../assets/LoveRose.png";
 import "./HomePage.css";
 
 const HomePage = () => {
@@ -28,36 +29,48 @@ const HomePage = () => {
       name: "Eterno Romance",
       images: [rosas1, rosas2],
       description: "Rosas",
+      price: "$48",
     },
     {
       id: 3,
       name: "Colores de Corazón",
       images: [Gerveras1, Gerveras2],
       description: "Gerveras",
+      price: "$55",
     },
     {
       id: 4,
       name: "Gerveras de Corazón",
       images: [GerverasDeAmor1],
       description: "Gerveras",
+      price: "$58",
     },
     {
       id: 5,
       name: "Amor Eterno",
       images: [AmorEterno, AmorEterno2],
       description: "Ramo Eterno de Liston",
+      price: "$80",
     },
     {
       id: 6,
       name: "Sol Eterno",
       images: [SolEterno, SolEterno2],
       description: "Girasol Eterno de Liston",
+      price: "$20",
     },
     {
       id: 7,
       name: "Canasta Festiva",
       images: [CanastaFestiva, CanastaFestiva2],
       description: "Canasta de Navidad",
+    },
+    {
+      id: 8,
+      name: "Love Rose",
+      images: [LoveRose],
+      description: "Rosa De Amor",
+      price: "$10",
     },
   ];
 

@@ -24,6 +24,7 @@ const Header = () => {
             color: "#E4405F",
             display: "flex",
             alignItems: "center",
+            marginRight: "15px",
           }}
         >
           <FaInstagram size={24} style={{ marginRight: "8px" }} />
