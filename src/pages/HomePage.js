@@ -29,7 +29,7 @@ const HomePage = () => {
       name: "Eterno Romance",
       images: [rosas1, rosas2],
       description: "Rosas",
-      price: "$48",
+      price: "$45",
     },
     {
       id: 3,
@@ -43,14 +43,14 @@ const HomePage = () => {
       name: "Gerveras de Corazón",
       images: [GerverasDeAmor1],
       description: "Gerveras",
-      price: "$58",
+      price: "$55",
     },
     {
       id: 5,
       name: "Amor Eterno",
       images: [AmorEterno, AmorEterno2],
       description: "Ramo Eterno de Liston",
-      price: "$80",
+      price: "$65",
     },
     {
       id: 6,
@@ -70,7 +70,7 @@ const HomePage = () => {
       name: "Love Rose",
       images: [LoveRose],
       description: "Rosa De Amor",
-      price: "$10",
+      price: "$6",
     },
   ];
 
