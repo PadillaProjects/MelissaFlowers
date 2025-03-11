@@ -72,10 +72,8 @@ const items = [
   },
   {
     id: 8,
-    name: "Love Rose",
     images: [getImagePath("LoveRose")],
     description: "Rosa De Amor",
-    price: "$6",
   },
 ];
 

@@ -73,8 +73,8 @@ const ItemCard = ({ item }) => {
             loading="lazy"
           ></img>
         </div>
-        <h3 className="item-name">{item.name}</h3>
-        <h4 className="item-price">{item.price}</h4>
+        {item.name && <h3 className="item-name">{item.name}</h3>}
+        {item.price && <h4 className="item-price">{item.price}</h4>}
       </motion.div>
 
       <AnimatePresence>

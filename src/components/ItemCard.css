@@ -43,6 +43,10 @@
   height: 28rem;
 }
 
+.full {
+  height: 10%;
+}
+
 /* Modal Styles */
 .modal-backdrop {
   position: fixed;
