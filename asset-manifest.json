@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.7006f74f.css",
-    "main.js": "/static/js/main.c2711c19.js",
+    "main.css": "/static/css/main.40e51f6e.css",
+    "main.js": "/static/js/main.09b89c4a.js",
     "static/media/AmorEterno2.png": "/static/media/AmorEterno2.54d2da3c3c78fa6a0eb9.png",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.614e0b0d943305330bd2.png",
     "static/media/background.png": "/static/media/background.ed376321dce4c3ef14bb.png",
@@ -11,17 +11,33 @@
     "static/media/Rosas2.png": "/static/media/Rosas2.13feac8482e635f101c7.png",
     "static/media/Rosas1.png": "/static/media/Rosas1.e79f74a211556bf5da53.png",
     "static/media/AmorEterno.png": "/static/media/AmorEterno.9ecf4bf341fdead2a2c8.png",
+    "static/media/GerverasDeAmor2.png": "/static/media/GerverasDeAmor2.75b8deaeab295c2fde06.png",
     "static/media/GerverasDeAmor1.png": "/static/media/GerverasDeAmor1.d94563f7c902a44ccaff.png",
     "static/media/SolEterno.png": "/static/media/SolEterno.4afe156e1deaa02d41f8.png",
     "static/media/LoveRose.png": "/static/media/LoveRose.f4e33d870915ba1c0f20.png",
     "static/media/CanastaFestiva.png": "/static/media/CanastaFestiva.6603af6e59a038a69767.png",
     "static/media/CanastaFestiva2.png": "/static/media/CanastaFestiva2.8daa86a00e8d2aa7f2e3.png",
+    "static/media/AmorEterno2.webp": "/static/media/AmorEterno2.c868969eda86f8fee46b.webp",
+    "static/media/GerveraYRosas.webp": "/static/media/GerveraYRosas.eda81c6196cee4dc8294.webp",
+    "static/media/Rosas2.webp": "/static/media/Rosas2.7a92bdf73e5174165216.webp",
+    "static/media/Rosas1.webp": "/static/media/Rosas1.01298bdbd17cadb4dd6b.webp",
+    "static/media/Gerveras1.webp": "/static/media/Gerveras1.acb893bdf73d91fd8591.webp",
+    "static/media/SolEterno.webp": "/static/media/SolEterno.d13495acc4be2711245f.webp",
+    "static/media/Gerveras2.webp": "/static/media/Gerveras2.226fe61243b072db2db1.webp",
+    "static/media/SolEterno2.webp": "/static/media/SolEterno2.6b29468f947ee3824a7f.webp",
+    "static/media/AmorEterno.webp": "/static/media/AmorEterno.03bd88c0e43089aaddb0.webp",
+    "static/media/CanastaFestiva.webp": "/static/media/CanastaFestiva.5953ce9c9052b452f5d4.webp",
+    "static/media/GerverasDeAmor2.webp": "/static/media/GerverasDeAmor2.3cf31e133885529bd7b8.webp",
+    "static/media/GerverasDeAmor1.webp": "/static/media/GerverasDeAmor1.96f88a08830ffa9dadb1.webp",
+    "static/media/CanastaFestiva2.webp": "/static/media/CanastaFestiva2.bdca9deff993545cec22.webp",
+    "static/media/background.webp": "/static/media/background.1aced4db7db2982628e9.webp",
+    "static/media/LoveRose.webp": "/static/media/LoveRose.5e768c905c21dadbe0ac.webp",
     "index.html": "/index.html",
-    "main.7006f74f.css.map": "/static/css/main.7006f74f.css.map",
-    "main.c2711c19.js.map": "/static/js/main.c2711c19.js.map"
+    "main.40e51f6e.css.map": "/static/css/main.40e51f6e.css.map",
+    "main.09b89c4a.js.map": "/static/js/main.09b89c4a.js.map"
   },
   "entrypoints": [
-    "static/css/main.7006f74f.css",
-    "static/js/main.c2711c19.js"
+    "static/css/main.40e51f6e.css",
+    "static/js/main.09b89c4a.js"
   ]
 }
