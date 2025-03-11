@@ -70,6 +70,7 @@ const ItemCard = ({ item }) => {
             className="card-image"
             src={item.images[0]}
             alt={item.name}
+            loading="lazy"
           ></img>
         </div>
         <h3 className="item-name">{item.name}</h3>
