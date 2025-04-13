@@ -11,16 +11,22 @@ const getImagePath = (imageName) => {
       .toDataURL("image/webp")
       .indexOf("data:image/webp") !== -1;
 
-  const basePath = supportsWebP ? "/assets/webp/" : "/assets/";
-  const extensions = supportsWebP ? [".webp"] : [".jpg", ".png"];
+  try {
+    if (supportsWebP) {
+      return require(`../assets/webp/${imageName}.webp`);
+    }
 
-  for (let ext of extensions) {
-    const url = `${basePath}${imageName}${ext}`;
-    // You can’t check existence directly, so you’ll need a fallback strategy or let browser handle 404
-    return url;
+    // Try JPG first
+    try {
+      return require(`../assets/${imageName}.jpg`);
+    } catch {
+      // Then try PNG
+      return require(`../assets/${imageName}.png`);
+    }
+  } catch (error) {
+    console.warn(`Image not found: ${imageName}`, error);
+    return "";
   }
-
-  return "";
 };
 
 const items = [
