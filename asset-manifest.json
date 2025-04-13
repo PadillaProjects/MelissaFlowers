@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.40e51f6e.css",
-    "main.js": "/static/js/main.09b89c4a.js",
+    "main.js": "/static/js/main.9ca9be7e.js",
     "static/media/AmorEterno2.png": "/static/media/AmorEterno2.54d2da3c3c78fa6a0eb9.png",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.614e0b0d943305330bd2.png",
     "static/media/background.png": "/static/media/background.ed376321dce4c3ef14bb.png",
@@ -19,25 +19,36 @@
     "static/media/CanastaFestiva2.png": "/static/media/CanastaFestiva2.8daa86a00e8d2aa7f2e3.png",
     "static/media/AmorEterno2.webp": "/static/media/AmorEterno2.c868969eda86f8fee46b.webp",
     "static/media/GerveraYRosas.webp": "/static/media/GerveraYRosas.eda81c6196cee4dc8294.webp",
+    "static/media/ArbolDeEnsueno.webp": "/static/media/ArbolDeEnsueno.d99f5361ea16bf3c0a57.webp",
     "static/media/Rosas2.webp": "/static/media/Rosas2.7a92bdf73e5174165216.webp",
     "static/media/Rosas1.webp": "/static/media/Rosas1.01298bdbd17cadb4dd6b.webp",
+    "static/media/SuenoDePrincesa1.webp": "/static/media/SuenoDePrincesa1.eb6239d08398bff133d2.webp",
     "static/media/Gerveras1.webp": "/static/media/Gerveras1.acb893bdf73d91fd8591.webp",
     "static/media/SolEterno.webp": "/static/media/SolEterno.d13495acc4be2711245f.webp",
+    "static/media/PassionYElegancia2.webp": "/static/media/PassionYElegancia2.841a3cb192a247771e0f.webp",
+    "static/media/PasionYElegancia.webp": "/static/media/PasionYElegancia.bbd81fc5ff61ab8565bf.webp",
     "static/media/Gerveras2.webp": "/static/media/Gerveras2.226fe61243b072db2db1.webp",
     "static/media/SolEterno2.webp": "/static/media/SolEterno2.6b29468f947ee3824a7f.webp",
     "static/media/AmorEterno.webp": "/static/media/AmorEterno.03bd88c0e43089aaddb0.webp",
+    "static/media/MediaLuna2.webp": "/static/media/MediaLuna2.9415763b1dab2984b5a3.webp",
+    "static/media/RamoRomantico1.webp": "/static/media/RamoRomantico1.c8ff67ec2d42a30e8409.webp",
+    "static/media/MediaLuna1.webp": "/static/media/MediaLuna1.7c1997288292f3c1c61d.webp",
+    "static/media/BlancuraMexicana.webp": "/static/media/BlancuraMexicana.691cc10a9b2c42075368.webp",
     "static/media/CanastaFestiva.webp": "/static/media/CanastaFestiva.5953ce9c9052b452f5d4.webp",
     "static/media/GerverasDeAmor2.webp": "/static/media/GerverasDeAmor2.3cf31e133885529bd7b8.webp",
     "static/media/GerverasDeAmor1.webp": "/static/media/GerverasDeAmor1.96f88a08830ffa9dadb1.webp",
     "static/media/CanastaFestiva2.webp": "/static/media/CanastaFestiva2.bdca9deff993545cec22.webp",
     "static/media/background.webp": "/static/media/background.1aced4db7db2982628e9.webp",
+    "static/media/SuenoDePrincesa2.webp": "/static/media/SuenoDePrincesa2.79c362e9c97b4442d36f.webp",
+    "static/media/RosasEternas1.webp": "/static/media/RosasEternas1.352abb340ea743ad9ab5.webp",
     "static/media/LoveRose.webp": "/static/media/LoveRose.5e768c905c21dadbe0ac.webp",
+    "static/media/RosasEternas2.webp": "/static/media/RosasEternas2.26b8ae0b51ec321ca5be.webp",
     "index.html": "/index.html",
     "main.40e51f6e.css.map": "/static/css/main.40e51f6e.css.map",
-    "main.09b89c4a.js.map": "/static/js/main.09b89c4a.js.map"
+    "main.9ca9be7e.js.map": "/static/js/main.9ca9be7e.js.map"
   },
   "entrypoints": [
     "static/css/main.40e51f6e.css",
-    "static/js/main.09b89c4a.js"
+    "static/js/main.9ca9be7e.js"
   ]
 }
