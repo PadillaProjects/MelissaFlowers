@@ -12,17 +12,9 @@ const getImagePath = (imageName) => {
       .indexOf("data:image/webp") !== -1;
 
   try {
-    if (supportsWebP) {
-      return require(`../assets/webp/${imageName}.webp`);
-    }
-
-    // Try JPG first
-    try {
-      return require(`../assets/${imageName}.jpg`);
-    } catch {
-      // Then try PNG
-      return require(`../assets/${imageName}.png`);
-    }
+    return supportsWebP
+      ? require(`../assets/webp/${imageName}.webp`)
+      : require(`../assets/${imageName}.png`);
   } catch (error) {
     console.warn(`Image not found: ${imageName}`, error);
     return "";
