@@ -11,15 +11,30 @@ const getImagePath = (imageName) => {
       .toDataURL("image/webp")
       .indexOf("data:image/webp") !== -1;
 
-  // Try to load WebP first, otherwise fallback to PNG
-  try {
-    return supportsWebP
-      ? require(`../assets/webp/${imageName}.webp`)
-      : require(`../assets/${imageName}.png`);
-  } catch (error) {
-    console.warn(`Image not found: ${imageName}`, error);
-    return "";
+  const tryRequire = (path) => {
+    try {
+      return require(`${path}`);
+    } catch {
+      return null;
+    }
+  };
+
+  // Try WebP first
+  if (supportsWebP) {
+    const webp = tryRequire(`../assets/webp/${imageName}.webp`);
+    if (webp) return webp;
   }
+
+  // Then try JPG
+  const jpg = tryRequire(`../assets/${imageName}.jpg`);
+  if (jpg) return jpg;
+
+  // Then try PNG
+  const png = tryRequire(`../assets/${imageName}.png`);
+  if (png) return png;
+
+  console.warn(`Image not found: ${imageName}`);
+  return "";
 };
 
 const items = [
