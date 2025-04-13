@@ -11,29 +11,15 @@ const getImagePath = (imageName) => {
       .toDataURL("image/webp")
       .indexOf("data:image/webp") !== -1;
 
-  const tryRequire = (path) => {
-    try {
-      return require(`${path}`);
-    } catch {
-      return null;
-    }
-  };
+  const basePath = supportsWebP ? "/assets/webp/" : "/assets/";
+  const extensions = supportsWebP ? [".webp"] : [".jpg", ".png"];
 
-  // Try WebP first
-  if (supportsWebP) {
-    const webp = tryRequire(`../assets/webp/${imageName}.webp`);
-    if (webp) return webp;
+  for (let ext of extensions) {
+    const url = `${basePath}${imageName}${ext}`;
+    // You can’t check existence directly, so you’ll need a fallback strategy or let browser handle 404
+    return url;
   }
 
-  // Then try JPG
-  const jpg = tryRequire(`../assets/${imageName}.jpg`);
-  if (jpg) return jpg;
-
-  // Then try PNG
-  const png = tryRequire(`../assets/${imageName}.png`);
-  if (png) return png;
-
-  console.warn(`Image not found: ${imageName}`);
   return "";
 };
 
