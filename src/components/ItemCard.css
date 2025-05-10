@@ -1,8 +1,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  width: 22rem;
-  height: 37rem;
+  width: 8rem;
+  height: 12rem;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); /* Add shadow */
   border: 3px solid black;
   align-items: center;
@@ -11,9 +11,9 @@
 
 .item-name {
   font-family: "Playfair Display", serif;
-  font-size: 30px;
+  font-size: 12px;
   margin: 0;
-  margin-top: 20px;
+  margin-top: 8px;
 }
 
 @keyframes gradient-animation {
@@ -27,20 +27,20 @@
 
 .item-price {
   font-family: "Playfair Display", serif;
-  font-size: 26px;
+  font-size: 12px;
   color: #6f0a23;
   margin: 0;
   margin-top: 20px;
 }
 
 .card-image {
-  width: 22rem;
-  height: 28rem;
+  width: 8rem;
+  height: 10rem;
 }
 
 .image-container {
   border-bottom: 3px solid black;
-  height: 28rem;
+  height: 10rem;
 }
 
 .full {
@@ -133,4 +133,26 @@
   font-size: 1rem;
   text-align: center;
   pointer-events: none; /* Ensure it doesn't interfere with the image click */
+}
+
+@media (min-width: 1024px) {
+  .card {
+    width: 12rem;
+    height: 18rem;
+  }
+
+  .card-image {
+    width: 12rem;
+    height: 15rem;
+  }
+
+  .image-container {
+    height: 15rem;
+  }
+
+  .item-name,
+  .item-price {
+    font-size: 16px;
+    margin-top: 12px;
+  }
 }
