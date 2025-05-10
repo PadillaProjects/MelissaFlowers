@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.40e51f6e.css",
+    "main.css": "/static/css/main.c72394e1.css",
     "main.js": "/static/js/main.0242bbb5.js",
     "static/media/AmorEterno2.png": "/static/media/AmorEterno2.54d2da3c3c78fa6a0eb9.png",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.614e0b0d943305330bd2.png",
@@ -55,11 +55,11 @@
     "static/media/LoveRose.webp": "/static/media/LoveRose.5e768c905c21dadbe0ac.webp",
     "static/media/RosasEternas2.webp": "/static/media/RosasEternas2.05be2b6f22cec2295d25.webp",
     "index.html": "/index.html",
-    "main.40e51f6e.css.map": "/static/css/main.40e51f6e.css.map",
+    "main.c72394e1.css.map": "/static/css/main.c72394e1.css.map",
     "main.0242bbb5.js.map": "/static/js/main.0242bbb5.js.map"
   },
   "entrypoints": [
-    "static/css/main.40e51f6e.css",
+    "static/css/main.c72394e1.css",
     "static/js/main.0242bbb5.js"
   ]
 }
