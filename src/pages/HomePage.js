@@ -23,6 +23,54 @@ const getImagePath = (imageName) => {
 
 const items = [
   {
+    id: 9,
+    name: "Arbol De Ensueño",
+    images: [getImagePath("ArbolDeEnsueno")],
+    description: "Arbol De Ensueño",
+  },
+  {
+    id: 10,
+    name: "Blancura Mexicana",
+    images: [getImagePath("BlancuraMexicana")],
+    description: "Blancura Mexicana",
+  },
+  {
+    id: 11,
+    name: "Media Luna",
+    images: [getImagePath("MediaLuna1"), getImagePath("MediaLuna2")],
+    description: "Media Luna",
+  },
+  {
+    id: 12,
+    name: "Pasión y Elegancia",
+    images: [
+      getImagePath("PasionYElegancia"),
+      getImagePath("PassionYElegancia2"),
+    ],
+    description: "Pasión y Elegancia",
+  },
+  {
+    id: 13,
+    name: "Ramo Romántico",
+    images: [getImagePath("RamoRomantico1")],
+    description: "Ramo Romántico",
+  },
+  {
+    id: 14,
+    name: "Rosas Eternas",
+    images: [getImagePath("RosasEternas1"), getImagePath("RosasEternas2")],
+    description: "Rosas Eternas",
+  },
+  {
+    id: 15,
+    name: "Sueño de Princesa",
+    images: [
+      getImagePath("SuenoDePrincesa1"),
+      getImagePath("SuenoDePrincesa2"),
+    ],
+    description: "Sueño de Princesa",
+  },
+  {
     id: 1,
     name: "Gerveras con Rosas",
     images: [getImagePath("GerveraYRosas")],
@@ -73,54 +121,6 @@ const items = [
     id: 8,
     images: [getImagePath("LoveRose")],
     description: "Rosa De Amor",
-  },
-  {
-    id: 9,
-    name: "Arbol De Ensueño",
-    images: [getImagePath("ArbolDeEnsueno")],
-    description: "Arbol De Ensueño",
-  },
-  {
-    id: 10,
-    name: "Blancura Mexicana",
-    images: [getImagePath("BlancuraMexicana")],
-    description: "Blancura Mexicana",
-  },
-  {
-    id: 11,
-    name: "Media Luna",
-    images: [getImagePath("MediaLuna1"), getImagePath("MediaLuna2")],
-    description: "Media Luna",
-  },
-  {
-    id: 12,
-    name: "Pasión y Elegancia",
-    images: [
-      getImagePath("PasionYElegancia"),
-      getImagePath("PassionYElegancia2"),
-    ],
-    description: "Pasión y Elegancia",
-  },
-  {
-    id: 13,
-    name: "Ramo Romántico",
-    images: [getImagePath("RamoRomantico1")],
-    description: "Ramo Romántico",
-  },
-  {
-    id: 14,
-    name: "Rosas Eternas",
-    images: [getImagePath("RosasEternas1"), getImagePath("RosasEternas2")],
-    description: "Rosas Eternas",
-  },
-  {
-    id: 15,
-    name: "Sueño de Princesa",
-    images: [
-      getImagePath("SuenoDePrincesa1"),
-      getImagePath("SuenoDePrincesa2"),
-    ],
-    description: "Sueño de Princesa",
   },
 ];
 
