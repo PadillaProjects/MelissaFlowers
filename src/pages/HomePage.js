@@ -8,7 +8,7 @@ const getImageSources = (imageName) => {
   try {
     return {
       webp: require(`../assets/webp/${imageName}.webp`),
-      fallback: require(`../assets/${imageName}.png`),
+      fallback: require(`../assets/${imageName}.jpg`),
     };
   } catch (error) {
     console.warn(`Missing image: ${imageName}`, error);
