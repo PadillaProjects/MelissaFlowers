@@ -76,12 +76,18 @@
 }
 
 .back-arrow {
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  color: #fff;
   margin-top: 20px;
-  cursor: pointer;
-  z-index: 2;
+}
+
+body.bottom-nav-up .back-arrow {
+  position: fixed;
+  bottom: 100px;
+  left: 20px;
+  margin-top: 0;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 12px;
+  border-radius: 8px;
+  z-index: 9999;
 }
 
 .image-counter {

@@ -19,6 +19,25 @@ const EnlargedModal = ({
     setHasLoaded(false);
   }, [currentImageIndex]);
 
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target.offsetHeight > 100) {
+          document.body.classList.add("bottom-nav-up");
+        } else {
+          document.body.classList.remove("bottom-nav-up");
+        }
+      }
+    });
+
+    const bottomNav = document.querySelector(".bottom-nav");
+    if (bottomNav) observer.observe(bottomNav);
+
+    return () => {
+      if (bottomNav) observer.unobserve(bottomNav);
+    };
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
