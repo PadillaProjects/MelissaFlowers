@@ -98,12 +98,20 @@ body.bottom-nav-up .back-arrow {
   z-index: 2;
 }
 
+.tap-text-container {
+  display: flex;
+  gap: 16px; /* space between the two texts */
+  margin-top: 10px;
+  flex-wrap: wrap; /* allows wrapping on small screens */
+  justify-content: center; /* center the texts */
+}
+
 .tap-text {
   font-family: "Poppins", sans-serif;
   color: #aaa;
   font-size: 12px;
-  margin-top: 10px;
   z-index: 2;
+  display: inline-block; /* <--- Add this line */
 }
 
 .spinner-overlay {

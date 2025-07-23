@@ -100,10 +100,9 @@ const EnlargedModal = ({
             }}
           />
         </div>
-
-        {item.images.length > 1 && (
-          <div className="tap-text">Tap image for next image</div>
-        )}
+        <div className="tap-text">
+          Tap outside to exit<br></br>Tap image for next image
+        </div>
 
         <motion.div
           className="back-arrow"
