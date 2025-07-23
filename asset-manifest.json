@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.73677a48.css",
-    "main.js": "/static/js/main.1d7c4bb9.js",
+    "main.js": "/static/js/main.9210d575.js",
     "static/media/AmorEterno2.png": "/static/media/AmorEterno2.54d2da3c3c78fa6a0eb9.png",
     "static/media/GerveraYRosas.png": "/static/media/GerveraYRosas.614e0b0d943305330bd2.png",
     "static/media/RosasEternas2.png": "/static/media/RosasEternas2.956bed7140e45bc24dcc.png",
@@ -32,7 +32,7 @@
     "static/media/SolEterno.png": "/static/media/SolEterno.4afe156e1deaa02d41f8.png",
     "static/media/MediaLuna2.png": "/static/media/MediaLuna2.aaa988d394714a062e73.png",
     "static/media/Eventos2.png": "/static/media/Eventos2.e2f8c83da74e61cf5d52.png",
-    "static/media/RosasYTulipanes2.png": "/static/media/RosasYTulipanes2.8c3499fd253c4c2f7efb.png",
+    "static/media/RosasYTulipanes2.png": "/static/media/RosasYTulipanes2.2d947ff1ba8b8a5b5841.png",
     "static/media/LoveRose.png": "/static/media/LoveRose.f4e33d870915ba1c0f20.png",
     "static/media/CanastaFestiva.png": "/static/media/CanastaFestiva.6603af6e59a038a69767.png",
     "static/media/CanastaFestiva2.png": "/static/media/CanastaFestiva2.8daa86a00e8d2aa7f2e3.png",
@@ -70,14 +70,14 @@
     "static/media/FlorEternaIndividual1.webp": "/static/media/FlorEternaIndividual1.0c89ccb98b821f149c89.webp",
     "static/media/FlorEternaIndividual3.webp": "/static/media/FlorEternaIndividual3.772d06ef7674f4d9cb3a.webp",
     "static/media/Eventos2.webp": "/static/media/Eventos2.051d9b5d3cf85718124b.webp",
-    "static/media/RosasYTulipanes2.webp": "/static/media/RosasYTulipanes2.dff135688a257680da52.webp",
     "static/media/RosasYTulipanes1.webp": "/static/media/RosasYTulipanes1.51ac34c7d262a28cbea5.webp",
+    "static/media/RosasYTulipanes2.webp": "/static/media/RosasYTulipanes2.9a739a8f92acfdc23c7c.webp",
     "index.html": "/index.html",
     "main.73677a48.css.map": "/static/css/main.73677a48.css.map",
-    "main.1d7c4bb9.js.map": "/static/js/main.1d7c4bb9.js.map"
+    "main.9210d575.js.map": "/static/js/main.9210d575.js.map"
   },
   "entrypoints": [
     "static/css/main.73677a48.css",
-    "static/js/main.1d7c4bb9.js"
+    "static/js/main.9210d575.js"
   ]
 }
