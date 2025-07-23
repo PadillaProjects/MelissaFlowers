@@ -1,23 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import ItemCard from "../components/ItemCard";
 import "./HomePage.css";
+import blurhashes from "../blurhashes.json";
+import ItemCardContainer from "../components/ItemCardContainer";
 
 // Function to get WebP or fallback image dynamically
-const getImagePath = (imageName) => {
-  const supportsWebP =
-    document
-      .createElement("canvas")
-      .toDataURL("image/webp")
-      .indexOf("data:image/webp") !== -1;
-
+const getImageSources = (imageName) => {
   try {
-    return supportsWebP
-      ? require(`../assets/webp/${imageName}.webp`)
-      : require(`../assets/${imageName}.png`);
+    return {
+      webp: require(`../assets/webp/${imageName}.webp`),
+      fallback: require(`../assets/${imageName}.png`),
+    };
   } catch (error) {
-    console.warn(`Image not found: ${imageName}`, error);
-    return "";
+    console.warn(`Missing image: ${imageName}`, error);
+    return { webp: "", fallback: "" };
   }
 };
 
@@ -25,102 +20,168 @@ const items = [
   {
     id: 9,
     name: "Arbol De Ensueño",
-    images: [getImagePath("ArbolDeEnsueno")],
+    images: [getImageSources("ArbolDeEnsueno")],
+    blurhashes: [blurhashes["ArbolDeEnsueno"]],
     description: "Arbol De Ensueño",
   },
   {
     id: 10,
     name: "Blancura Mexicana",
-    images: [getImagePath("BlancuraMexicana")],
+    images: [getImageSources("BlancuraMexicana")],
+    blurhashes: [blurhashes["BlancuraMexicana"]],
     description: "Blancura Mexicana",
   },
   {
     id: 11,
     name: "Media Luna",
-    images: [getImagePath("MediaLuna1"), getImagePath("MediaLuna2")],
+    images: [getImageSources("MediaLuna1"), getImageSources("MediaLuna2")],
+    blurhashes: [blurhashes["MediaLuna1"], blurhashes["MediaLuna2"]],
     description: "Media Luna",
   },
   {
     id: 12,
     name: "Pasión y Elegancia",
     images: [
-      getImagePath("PasionYElegancia"),
-      getImagePath("PassionYElegancia2"),
+      getImageSources("PasionYElegancia"),
+      getImageSources("PassionYElegancia2"),
+    ],
+    blurhashes: [
+      blurhashes["PasionYElegancia"],
+      blurhashes["PassionYElegancia2"],
     ],
     description: "Pasión y Elegancia",
   },
   {
     id: 13,
     name: "Ramo Romántico",
-    images: [getImagePath("RamoRomantico1")],
+    images: [getImageSources("RamoRomantico1")],
+    blurhashes: [blurhashes["RamoRomantico1"]],
     description: "Ramo Romántico",
   },
   {
     id: 14,
     name: "Rosas Eternas",
-    images: [getImagePath("RosasEternas1"), getImagePath("RosasEternas2")],
+    images: [
+      getImageSources("RosasEternas1"),
+      getImageSources("RosasEternas2"),
+    ],
+    blurhashes: [blurhashes["RosasEternas1"], blurhashes["RosasEternas2"]],
     description: "Rosas Eternas",
   },
   {
     id: 15,
     name: "Sueño de Princesa",
     images: [
-      getImagePath("SuenoDePrincesa1"),
-      getImagePath("SuenoDePrincesa2"),
+      getImageSources("SuenoDePrincesa1"),
+      getImageSources("SuenoDePrincesa2"),
+    ],
+    blurhashes: [
+      blurhashes["SuenoDePrincesa1"],
+      blurhashes["SuenoDePrincesa2"],
     ],
     description: "Sueño de Princesa",
   },
   {
     id: 1,
     name: "Gerveras con Rosas",
-    images: [getImagePath("GerveraYRosas")],
+    images: [getImageSources("GerveraYRosas")],
+    blurhashes: [blurhashes["GerveraYRosas"]],
     description: "Gerveras con Rosas",
   },
   {
     id: 2,
     name: "Eterno Romance",
-    images: [getImagePath("Rosas1"), getImagePath("Rosas2")],
+    images: [getImageSources("Rosas1"), getImageSources("Rosas2")],
+    blurhashes: [blurhashes["Rosas1"], blurhashes["Rosas2"]],
     description: "Rosas",
-    // price: "$45",
   },
   {
     id: 3,
     name: "Colores de Corazón",
-    images: [getImagePath("Gerveras1"), getImagePath("Gerveras2")],
+    images: [getImageSources("Gerveras1"), getImageSources("Gerveras2")],
+    blurhashes: [blurhashes["Gerveras1"], blurhashes["Gerveras2"]],
     description: "Gerveras",
-    // price: "$55",
   },
   {
     id: 4,
     name: "Gerveras de Corazón",
-    images: [getImagePath("GerverasDeAmor1")],
+    images: [getImageSources("GerverasDeAmor1")],
+    blurhashes: [blurhashes["GerverasDeAmor1"]],
     description: "Gerveras",
-    // price: "$55",
   },
   {
     id: 5,
     name: "Amor Eterno",
-    images: [getImagePath("AmorEterno"), getImagePath("AmorEterno2")],
+    images: [getImageSources("AmorEterno"), getImageSources("AmorEterno2")],
+    blurhashes: [blurhashes["AmorEterno"], blurhashes["AmorEterno2"]],
     description: "Ramo Eterno de Liston",
-    // price: "$65",
   },
   {
     id: 6,
     name: "Sol Eterno",
-    images: [getImagePath("SolEterno"), getImagePath("SolEterno2")],
+    images: [getImageSources("SolEterno"), getImageSources("SolEterno2")],
+    blurhashes: [blurhashes["SolEterno"], blurhashes["SolEterno2"]],
     description: "Girasol Eterno de Liston",
-    // price: "$20",
   },
   {
     id: 7,
     name: "Canasta Festiva",
-    images: [getImagePath("CanastaFestiva"), getImagePath("CanastaFestiva2")],
+    images: [
+      getImageSources("CanastaFestiva"),
+      getImageSources("CanastaFestiva2"),
+    ],
+    blurhashes: [blurhashes["CanastaFestiva"], blurhashes["CanastaFestiva2"]],
     description: "Canasta de Navidad",
   },
   {
     id: 8,
-    images: [getImagePath("LoveRose")],
+    images: [getImageSources("LoveRose")],
+    blurhashes: [blurhashes["LoveRose"]],
     description: "Rosa De Amor",
+  },
+
+  // 🆕 New Items not originally listed:
+  {
+    id: 17,
+    name: "Brillo de Sol",
+    images: [getImageSources("BrilloDeSol1"), getImageSources("BrilloDeSol2")],
+    blurhashes: [blurhashes["BrilloDeSol1"], blurhashes["BrilloDeSol2"]],
+    description: "Brillo de Sol",
+  },
+  {
+    id: 18,
+    name: "Eventos",
+    images: [getImageSources("Eventos1"), getImageSources("Eventos2")],
+    blurhashes: [blurhashes["Eventos1"], blurhashes["Eventos2"]],
+    description: "Eventos",
+  },
+  {
+    id: 19,
+    name: "Flor Eterna Individual",
+    images: [
+      getImageSources("FlorEternaIndividual1"),
+      getImageSources("FlorEternaIndividual2"),
+      getImageSources("FlorEternaIndividual3"),
+    ],
+    blurhashes: [
+      blurhashes["FlorEternaIndividual1"],
+      blurhashes["FlorEternaIndividual2"],
+      blurhashes["FlorEternaIndividual3"],
+    ],
+    description: "Flor Eterna Individual",
+  },
+  {
+    id: 20,
+    name: "Rosas y Tulipanes",
+    images: [
+      getImageSources("RosasYTulipanes1"),
+      getImageSources("RosasYTulipanes2"),
+    ],
+    blurhashes: [
+      blurhashes["RosasYTulipanes1"],
+      blurhashes["RosasYTulipanes2"],
+    ],
+    description: "Rosas y Tulipanes",
   },
 ];
 
@@ -129,13 +190,7 @@ const HomePage = () => {
     <div className="page-layout">
       <div className="vertical-column"></div>
       <div className="page-column">
-        <div>
-          <div className="cards-container">
-            {items.map((item) => (
-              <ItemCard key={item.id} item={item} />
-            ))}
-          </div>
-        </div>
+        <ItemCardContainer items={items} />
       </div>
       <div className="vertical-column"></div>
     </div>

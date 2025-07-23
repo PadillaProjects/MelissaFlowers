@@ -52,8 +52,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(
     135deg,
     rgba(255, 182, 193, 0.865) 0%,
@@ -61,31 +61,40 @@
     rgba(255, 182, 193, 0.865) 100%
   );
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 20px;
   z-index: 1000;
 }
 
+.modal-image-wrapper {
+  max-width: 60%;
+  max-height: 60%;
+}
+
+.blurhash-wrapper {
+  max-width: 60%;
+  max-height: 60%;
+}
+
 .enlarged-image {
-  max-width: 95%;
-  max-height: 95%;
+  width: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   border: black solid 5px;
+  align-self: center;
+}
+
+.image-container {
+  border-bottom: 3px solid black;
+  height: 10rem;
+  width: 100%;
+  overflow: hidden;
+  position: relative; /* needed for absolutely positioned children */
 }
 
 .image-counter {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  z-index: 10;
+  margin-top: 20px;
 }
 
 .back-arrow {
@@ -115,10 +124,6 @@
   transform: translate(-50%, -50%);
   font-size: 1.5rem;
   color: white;
-}
-
-.image-wrapper {
-  position: relative;
 }
 
 .tap-text {
@@ -155,4 +160,25 @@
     font-size: 16px;
     margin-top: 12px;
   }
+
+  .modal-image-wrapper {
+    max-height: 60%;
+    max-width: 60%;
+  }
+}
+
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.blurhash-canvas,
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
