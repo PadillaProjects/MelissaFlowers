@@ -84,21 +84,27 @@ const EnlargedModal = ({
             </div>
           )}
 
-          <motion.img
-            className="enlarged-image"
-            src={item.images[currentImageIndex].fallback}
-            alt={item.name}
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{
               opacity: hasLoaded ? 1 : 0,
               scale: hasLoaded ? 1 : 0.95,
             }}
             transition={{ duration: 0.3 }}
-            onLoad={() => {
-              setIsLoading(false);
-              setHasLoaded(true);
-            }}
-          />
+          >
+            <picture key={currentImageIndex}>
+              <source srcSet={item.images[currentImageIndex].webp} type="image/webp" />
+              <img
+                className="enlarged-image"
+                src={item.images[currentImageIndex].fallback}
+                alt={item.name}
+                onLoad={() => {
+                  setIsLoading(false);
+                  setHasLoaded(true);
+                }}
+              />
+            </picture>
+          </motion.div>
         </div>
         <div className="tap-text">
           Tap outside to exit<br></br>Tap image for next image

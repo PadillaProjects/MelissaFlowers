@@ -41,7 +41,8 @@ const ItemCardContainer = ({ items }) => {
     if (selectedItem) {
       setIsLoading(true);
       const image = new Image();
-      image.src = selectedItem.images[currentImageIndex].fallback;
+      // Preload WebP version instead of fallback
+      image.src = selectedItem.images[currentImageIndex].webp;
       image.onload = () => setIsLoading(false);
     }
   }, [selectedItem, currentImageIndex]);

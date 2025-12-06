@@ -1,10 +1,12 @@
 // components/ItemCard.js
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Blurhash } from "react-blurhash";
 import "./ItemCard.css";
 
 const ItemCard = ({ item, onClick }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <motion.div
       className="card"
@@ -17,11 +19,22 @@ const ItemCard = ({ item, onClick }) => {
           {item.blurhashes?.[0]?.length >= 6 && (
             <Blurhash
               hash={item.blurhashes[0]}
-              width="100%"
-              height="100%"
+              width={32}
+              height={32}
               resolutionX={32}
               resolutionY={32}
               punch={1}
+              className="blurhash-canvas"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                opacity: imageLoaded ? 0 : 1,
+                transition: "opacity 0.3s ease-in-out",
+                zIndex: 1
+              }}
             />
           )}
           <picture>
@@ -31,6 +44,11 @@ const ItemCard = ({ item, onClick }) => {
               src={item.images[0].fallback}
               alt={item.name}
               loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              style={{
+                opacity: imageLoaded ? 1 : 0,
+                transition: "opacity 0.3s ease-in-out"
+              }}
             />
           </picture>
         </div>
