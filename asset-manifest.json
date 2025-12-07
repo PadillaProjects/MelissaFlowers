@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.6a985800.css",
-    "main.js": "/static/js/main.5ee50e3f.js",
+    "main.css": "/static/css/main.ef7ac896.css",
+    "main.js": "/static/js/main.378e5725.js",
     "static/media/CentroDeMesa2.jpeg": "/static/media/CentroDeMesa2.1b71ebb543fae6ff1899.jpeg",
     "static/media/EncantoEterno3.jpeg": "/static/media/EncantoEterno3.96085c2404614a6424ee.jpeg",
     "static/media/RosasEternas1.jpg": "/static/media/RosasEternas1.4b1926655d4a3d10341a.jpg",
@@ -109,11 +109,11 @@
     "static/media/RosasYTulipanes2.webp": "/static/media/RosasYTulipanes2.92029ce07a9bd415da34.webp",
     "static/media/RosasYTulipanes1.webp": "/static/media/RosasYTulipanes1.0f806099d275a083700b.webp",
     "index.html": "/index.html",
-    "main.6a985800.css.map": "/static/css/main.6a985800.css.map",
-    "main.5ee50e3f.js.map": "/static/js/main.5ee50e3f.js.map"
+    "main.ef7ac896.css.map": "/static/css/main.ef7ac896.css.map",
+    "main.378e5725.js.map": "/static/js/main.378e5725.js.map"
   },
   "entrypoints": [
-    "static/css/main.6a985800.css",
-    "static/js/main.5ee50e3f.js"
+    "static/css/main.ef7ac896.css",
+    "static/js/main.378e5725.js"
   ]
 }
