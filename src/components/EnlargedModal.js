@@ -1,9 +1,8 @@
 // EnlargedModal.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Blurhash } from "react-blurhash";
 import "./EnlargedModal.css";
-import { useEffect } from "react";
 
 const EnlargedModal = ({
   item,
@@ -13,11 +12,60 @@ const EnlargedModal = ({
   handleClose,
   handleClick,
 }) => {
-  const [hasLoaded, setHasLoaded] = React.useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [loadedIndices, setLoadedIndices] = useState(new Set());
+  const imgRef = React.useRef(null);
   const blurhashSize = Math.min(window.innerWidth * 0.9, 600);
+
+  // Check if this image was already loaded in this session
+  const wasAlreadyLoaded = loadedIndices.has(currentImageIndex);
+
+  // Reset loaded state when image changes (unless it was already loaded)
   useEffect(() => {
-    setHasLoaded(false);
-  }, [currentImageIndex]);
+    if (wasAlreadyLoaded) {
+      setImageLoaded(true);
+    } else {
+      setImageLoaded(false);
+    }
+  }, [currentImageIndex, wasAlreadyLoaded]);
+
+  // Check if cached image is already complete after render
+  useEffect(() => {
+    if (wasAlreadyLoaded && imgRef.current) {
+      // Use a small timeout to ensure the img src has been set
+      const timer = setTimeout(() => {
+        if (imgRef.current && imgRef.current.complete && imgRef.current.naturalHeight !== 0) {
+          setImageLoaded(true);
+        }
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [currentImageIndex, wasAlreadyLoaded]);
+
+  // Preload adjacent images for smooth navigation
+  useEffect(() => {
+    const preloadImages = [];
+    const totalImages = item.images.length;
+    
+    // Preload next image
+    const nextIndex = (currentImageIndex + 1) % totalImages;
+    const nextImg = new Image();
+    nextImg.src = item.images[nextIndex].webp;
+    preloadImages.push(nextImg);
+    
+    // Preload previous image
+    const prevIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+    const prevImg = new Image();
+    prevImg.src = item.images[prevIndex].webp;
+    preloadImages.push(prevImg);
+    
+    return () => {
+      // Cleanup
+      preloadImages.forEach(img => {
+        img.src = '';
+      });
+    };
+  }, [currentImageIndex, item.images]);
 
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
@@ -65,11 +113,12 @@ const EnlargedModal = ({
         </motion.div>
 
         <div
-          className={`modal-frame ${hasLoaded ? "loaded" : ""}`}
+          className={`modal-frame ${imageLoaded ? "loaded" : ""}`}
           onClick={handleClick}
         >
-          {!hasLoaded && isLoading && item.blurhashes && (
-            <div className="blurhash-container">
+          {/* Blurhash - only render if image hasn't been loaded before */}
+          {item.blurhashes && !wasAlreadyLoaded && (
+            <div className={`blurhash-container ${!imageLoaded ? "visible" : ""}`}>
               <Blurhash
                 hash={item.blurhashes[currentImageIndex]}
                 width={blurhashSize}
@@ -84,30 +133,31 @@ const EnlargedModal = ({
             </div>
           )}
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{
-              opacity: hasLoaded ? 1 : 0,
-              scale: hasLoaded ? 1 : 0.95,
-            }}
-            transition={{ duration: 0.3 }}
-          >
+          {/* Image - fades in when loaded */}
+          <div className="modal-image-wrapper">
             <picture key={currentImageIndex}>
               <source srcSet={item.images[currentImageIndex].webp} type="image/webp" />
               <img
+                ref={imgRef}
                 className="enlarged-image"
                 src={item.images[currentImageIndex].fallback}
                 alt={item.name}
-                onLoad={() => {
+                style={{
+                  opacity: imageLoaded ? 1 : 0,
+                  transition: wasAlreadyLoaded ? "none" : "opacity 0.3s ease-in-out"
+                }}
+                onLoad={(e) => {
                   setIsLoading(false);
-                  setHasLoaded(true);
+                  setImageLoaded(true);
+                  setLoadedIndices(prev => new Set(prev).add(currentImageIndex));
                 }}
               />
             </picture>
-          </motion.div>
+          </div>
         </div>
+
         <div className="tap-text">
-          Tap outside to exit<br></br>Tap image for next image
+          Presione imagen para siguiente imagen
         </div>
 
         <motion.div
@@ -118,7 +168,7 @@ const EnlargedModal = ({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          ← Back
+          ← Regresar
         </motion.div>
       </motion.div>
     </AnimatePresence>

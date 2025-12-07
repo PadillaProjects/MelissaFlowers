@@ -32,8 +32,9 @@ const ItemCard = ({ item, onClick }) => {
                 width: "100%",
                 height: "100%",
                 opacity: imageLoaded ? 0 : 1,
-                transition: "opacity 0.3s ease-in-out",
-                zIndex: 1
+                transition: "opacity 0.4s ease-in-out",
+                zIndex: 1,
+                display: "block"
               }}
             />
           )}
@@ -45,9 +46,10 @@ const ItemCard = ({ item, onClick }) => {
               alt={item.name}
               loading="lazy"
               onLoad={() => setImageLoaded(true)}
+              onError={() => setImageLoaded(true)}
               style={{
                 opacity: imageLoaded ? 1 : 0,
-                transition: "opacity 0.3s ease-in-out"
+                transition: "opacity 0.4s ease-in-out"
               }}
             />
           </picture>

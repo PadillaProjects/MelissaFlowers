@@ -246,6 +246,7 @@
   .hero-header {
     padding: var(--spacing-sm) var(--spacing-md);
     gap: var(--spacing-xs);
+    margin-top: var(--spacing-2xl);
   }
 
   .hero-header-title {
