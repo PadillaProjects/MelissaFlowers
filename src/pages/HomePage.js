@@ -4,6 +4,7 @@ import blurhashes from "../blurhashes.json";
 import ItemCardContainer from "../components/ItemCardContainer";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
+import ValentineBanner from "../components/ValentineBanner";
 
 // Function to get WebP or fallback image dynamically
 const getImageSources = (imageName) => {
@@ -298,6 +299,7 @@ const HomePage = () => {
   return (
     <div className="homepage">
       <Hero />
+      <ValentineBanner />
       
       <section id="gallery" className="gallery-section">
         <div className="gallery-header">

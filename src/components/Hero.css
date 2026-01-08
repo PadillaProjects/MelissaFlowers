@@ -46,18 +46,14 @@
   font-size: var(--font-size-sm);
 }
 
-.hero-instagram {
+.hero-facebook {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-md);
-  background: linear-gradient(
-    90deg,
-    rgba(233, 30, 99, 0.2),
-    rgba(156, 39, 176, 0.2)
-  );
+  background: rgba(24, 119, 242, 0.15);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(24, 119, 242, 0.3);
   border-radius: var(--radius-full);
   transition: all var(--transition-base);
   font-weight: 500;
@@ -66,12 +62,8 @@
   text-decoration: none;
 }
 
-.hero-instagram:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(233, 30, 99, 0.3),
-    rgba(156, 39, 176, 0.3)
-  );
+.hero-facebook:hover {
+  background: rgba(24, 119, 242, 0.25);
   transform: translateY(-2px);
   box-shadow: var(--shadow-glow);
 }
@@ -239,14 +231,15 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero {
-    min-height: 90vh;
+    min-height: 100vh;
     padding: var(--spacing-md);
+    padding-top: 180px; /* Extra space for header on mobile */
   }
 
   .hero-header {
     padding: var(--spacing-sm) var(--spacing-md);
     gap: var(--spacing-xs);
-    margin-top: var(--spacing-2xl);
+    margin-top: 0;
   }
 
   .hero-header-title {
@@ -262,14 +255,14 @@
     font-size: clamp(0.75rem, 3vw, 0.875rem);
   }
 
-  .hero-instagram {
+  .hero-facebook {
     font-size: clamp(0.75rem, 3vw, 0.875rem);
     padding: 6px var(--spacing-sm);
     gap: 4px;
   }
 
   .hero-content {
-    padding-top: 120px; /* Push content down to avoid header overlap */
+    padding-top: 0; /* Removed since hero section already has padding-top */
   }
 
   .hero-gradient-orb {

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaInstagram } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
 import "./Hero.css";
 import logoFull from "../assets/melibee-logo-full.png";
 
@@ -32,13 +32,13 @@ const Hero = () => {
           <p className="hero-header-address">El Paso, TX</p>
           <p className="hero-header-phone">Text: 915-207-4262</p>
           <a
-            className="hero-instagram"
-            href="https://www.instagram.com/melissa_soto3/"
+            className="hero-facebook"
+            href="https://www.facebook.com/people/%F0%9D%99%B5%F0%9D%9A%95%F0%9D%9A%98%F0%9D%9A%A0%F0%9D%9A%8E%F0%9D%9A%9B%F0%9D%9A%9C-%F0%9D%9A%8B%F0%9D%9A%A2-%F0%9D%95%84%F0%9D%95%96%F0%9D%95%9D%F0%9D%95%9A%F0%9D%95%93%F0%9D%95%96%F0%9D%95%96/61578006152375/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaInstagram size={20} style={{ marginRight: "6px" }} />
-            melissa_soto3
+            <FaFacebook size={20} style={{ marginRight: "6px" }} />
+            Flowers by Melibee
           </a>
         </div>
       </motion.div>
