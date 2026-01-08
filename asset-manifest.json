@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ef7ac896.css",
-    "main.js": "/static/js/main.378e5725.js",
+    "main.css": "/static/css/main.7e497f9d.css",
+    "main.js": "/static/js/main.3c3ae34f.js",
     "static/media/CentroDeMesa2.jpeg": "/static/media/CentroDeMesa2.1b71ebb543fae6ff1899.jpeg",
     "static/media/EncantoEterno3.jpeg": "/static/media/EncantoEterno3.96085c2404614a6424ee.jpeg",
     "static/media/RosasEternas1.jpg": "/static/media/RosasEternas1.4b1926655d4a3d10341a.jpg",
@@ -15,7 +15,9 @@
     "static/media/Eventos3.jpeg": "/static/media/Eventos3.6b123ce3ebcdd318c56d.jpeg",
     "static/media/Gerveras1.jpg": "/static/media/Gerveras1.ca09e6d19d67293fdf22.jpg",
     "static/media/RamoLila3.jpeg": "/static/media/RamoLila3.687c647c2afe30ec0b4e.jpeg",
+    "static/media/valentine-flower-2.png": "/static/media/valentine-flower-2.181810f6b56e3651db0c.png",
     "static/media/Gerveras2.jpg": "/static/media/Gerveras2.964c48445da927329085.jpg",
+    "static/media/valentine-flower-4.png": "/static/media/valentine-flower-4.36dfb432b03b7c34826b.png",
     "static/media/PassionYElegancia2.jpg": "/static/media/PassionYElegancia2.21da9ee600d6bec6dfa9.jpg",
     "static/media/SuenoDePrincesa1.jpg": "/static/media/SuenoDePrincesa1.d16a8889d91930f7059d.jpg",
     "static/media/Rosas2.jpg": "/static/media/Rosas2.a150ad78252ef1001ea2.jpg",
@@ -23,16 +25,20 @@
     "static/media/RamoDeAmorDe50_1.jpeg": "/static/media/RamoDeAmorDe50_1.ab1d1b7ef5e269eb497f.jpeg",
     "static/media/PasionYElegancia.jpg": "/static/media/PasionYElegancia.ad98850003197be6da0b.jpg",
     "static/media/RosasEternasConCajaRedonda2.jpg": "/static/media/RosasEternasConCajaRedonda2.cfe170c7ffe27968e7c2.jpg",
+    "static/media/valentine-flower-5.png": "/static/media/valentine-flower-5.3bbaf6e29b034407af24.png",
     "static/media/CentroDeMesa1.jpeg": "/static/media/CentroDeMesa1.63179f7746edadc88dff.jpeg",
     "static/media/ArbolDeEnsueno.jpg": "/static/media/ArbolDeEnsueno.8687196e4ece6f4a9c4c.jpg",
+    "static/media/valentine-flower-3.png": "/static/media/valentine-flower-3.de365e44a7a25a584c27.png",
     "static/media/AmorEterno2.jpg": "/static/media/AmorEterno2.38505bcb66732d2d1a9f.jpg",
     "static/media/AmorEterno.jpg": "/static/media/AmorEterno.ecf050a3ede44678ed00.jpg",
+    "static/media/valentine-flower-6.png": "/static/media/valentine-flower-6.5f0b5069134fde5bc689.png",
     "static/media/BlancuraMexicana.jpg": "/static/media/BlancuraMexicana.aa603a63cdc566a61f0a.jpg",
     "static/media/BrilloDeSol2.jpg": "/static/media/BrilloDeSol2.ab3d8e2368ff7e0544f2.jpg",
     "static/media/SolEterno2.jpg": "/static/media/SolEterno2.4762d95e06b623b6e796.jpg",
     "static/media/RosasEternasConCajaRedonda1.jpg": "/static/media/RosasEternasConCajaRedonda1.bd7306173742693b627f.jpg",
     "static/media/EncantoEterno2.jpeg": "/static/media/EncantoEterno2.84a185d69ed3009745a6.jpeg",
     "static/media/RosasYGirasoles.jpeg": "/static/media/RosasYGirasoles.c041e1d9bdbbbda5a535.jpeg",
+    "static/media/valentine-flower-1.png": "/static/media/valentine-flower-1.517f140a4f76479395e2.png",
     "static/media/SuenoDePrincesa2.jpg": "/static/media/SuenoDePrincesa2.e5995f15bcb110faf21e.jpg",
     "static/media/GerverasDeAmor2.jpg": "/static/media/GerverasDeAmor2.94f9591e884321484a98.jpg",
     "static/media/GerverasDeAmor1.jpg": "/static/media/GerverasDeAmor1.95fb284e66efd6780a90.jpg",
@@ -70,6 +76,7 @@
     "static/media/Rosas1.webp": "/static/media/Rosas1.c2076d7df8059d797303.webp",
     "static/media/Gerveras2.webp": "/static/media/Gerveras2.af4bb1bdf1594cfa6bee.webp",
     "static/media/RamoLila2.webp": "/static/media/RamoLila2.39f3ebbe6b3d1bda9367.webp",
+    "static/media/valentine-plushies.png": "/static/media/valentine-plushies.78a90645823ef6db1792.png",
     "static/media/SolEterno.webp": "/static/media/SolEterno.df5a795baea31dcc7d5d.webp",
     "static/media/RosasEternasConCajaRedonda1.webp": "/static/media/RosasEternasConCajaRedonda1.5e6fbd4d9a7e6862de5b.webp",
     "static/media/PasionYElegancia.webp": "/static/media/PasionYElegancia.1f760c9d9c5c1c7498de.webp",
@@ -109,11 +116,11 @@
     "static/media/RosasYTulipanes2.webp": "/static/media/RosasYTulipanes2.92029ce07a9bd415da34.webp",
     "static/media/RosasYTulipanes1.webp": "/static/media/RosasYTulipanes1.0f806099d275a083700b.webp",
     "index.html": "/index.html",
-    "main.ef7ac896.css.map": "/static/css/main.ef7ac896.css.map",
-    "main.378e5725.js.map": "/static/js/main.378e5725.js.map"
+    "main.7e497f9d.css.map": "/static/css/main.7e497f9d.css.map",
+    "main.3c3ae34f.js.map": "/static/js/main.3c3ae34f.js.map"
   },
   "entrypoints": [
-    "static/css/main.ef7ac896.css",
-    "static/js/main.378e5725.js"
+    "static/css/main.7e497f9d.css",
+    "static/js/main.3c3ae34f.js"
   ]
 }
