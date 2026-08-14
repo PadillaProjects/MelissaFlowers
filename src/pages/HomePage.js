@@ -7,6 +7,7 @@ import BolisMenu from "../components/BolisMenu";
 // import ValentineBanner from "../components/ValentineBanner";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { getOptimizedUrl } from "../services/cloudinary";
 
 const HomePage = () => {
   const [items, setItems] = useState([]);
@@ -28,11 +29,12 @@ const HomePage = () => {
         const itemsSnapshot = await getDocs(collection(db, "items"));
         const itemsData = itemsSnapshot.docs.map(doc => {
           const data = doc.data();
+          const fastUrl = getOptimizedUrl(data.imageUrl, 800);
           return {
             id: doc.id,
             ...data,
             // Wrap the single imageUrl in the format ItemCardContainer expects
-            images: data.imageUrl ? [{ webp: data.imageUrl, fallback: data.imageUrl }] : [],
+            images: data.imageUrl ? [{ webp: fastUrl, fallback: fastUrl }] : [],
             blurhashes: data.blurhash ? [data.blurhash] : []
           };
         });

@@ -19,3 +19,9 @@ export const uploadImageToCloudinary = async (file) => {
     throw error;
   }
 };
+
+export const getOptimizedUrl = (url, width = 800) => {
+  if (!url || !url.includes('cloudinary.com')) return url;
+  // This tells Cloudinary to automatically compress and resize the image for blazing fast loads
+  return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width}/`);
+};
