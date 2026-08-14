@@ -117,7 +117,7 @@ const EnlargedModal = ({
           onClick={handleClick}
         >
           {/* Blurhash - only render if image hasn't been loaded before */}
-          {item.blurhashes && !wasAlreadyLoaded && (
+          {item.blurhashes?.[currentImageIndex]?.length >= 6 && !wasAlreadyLoaded && (
             <div className={`blurhash-container ${!imageLoaded ? "visible" : ""}`}>
               <Blurhash
                 hash={item.blurhashes[currentImageIndex]}

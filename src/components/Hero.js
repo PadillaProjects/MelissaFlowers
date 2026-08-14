@@ -62,9 +62,25 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "15px" }}
         >
           <button className="cta-button" onClick={scrollToGallery}>
             Explorar Galería
+          </button>
+          <button 
+            className="cta-button" 
+            style={{ 
+              background: "transparent", 
+              border: "2px solid var(--color-primary)", 
+              color: "var(--color-primary)",
+              boxShadow: "none"
+            }} 
+            onClick={() => {
+              const bolis = document.getElementById("bolis");
+              if (bolis) bolis.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Ver Menú de Bolis
           </button>
         </motion.div>
       </div>

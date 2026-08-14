@@ -1,0 +1,126 @@
+.bolis-section {
+  padding: 4rem 1rem;
+  background-color: var(--color-background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-primary), sans-serif;
+}
+
+.bolis-menu-container {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bolis-header {
+  background: var(--gradient-primary);
+  color: white;
+  text-align: center;
+  padding: 3rem 1rem;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.bolis-header h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.bolis-header h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  margin-top: 5px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  opacity: 0.9;
+}
+
+.bolis-content {
+  padding: 2rem;
+}
+
+.bolis-category {
+  margin-bottom: 2.5rem;
+}
+
+.bolis-category-title {
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 0.8rem;
+}
+
+.bolis-sizes {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.bolis-flavors-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.bolis-flavor-item {
+  color: var(--color-text-primary);
+  padding: 0.6rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all var(--transition-base);
+}
+
+.bolis-flavor-item:hover {
+  color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.bolis-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 600px) {
+  .bolis-section {
+    padding: 2rem 1rem;
+  }
+  .bolis-header {
+    padding: 1.5rem 1rem;
+  }
+  .bolis-content {
+    padding: 1rem;
+  }
+  .bolis-category {
+    margin-bottom: 1.5rem;
+  }
+  .bolis-category-title {
+    margin-bottom: 0.2rem;
+    padding-bottom: 0.4rem;
+  }
+  .bolis-sizes {
+    margin-bottom: 0.8rem;
+  }
+  .bolis-flavor-item {
+    padding: 0.3rem 1rem;
+    margin-bottom: 0.2rem;
+  }
+  .bolis-footer {
+    padding: 1rem;
+  }
+}
