@@ -1,11 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaFacebook } from "react-icons/fa";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../firebaseConfig";
 import "./Hero.css";
 import logoFull from "../assets/melibee-logo-full.png";
 
 const Hero = () => {
   const scrollToGallery = () => {
+    try { logEvent(analytics, 'click_navigation', { destination: 'gallery' }); } catch (e) {}
     const gallery = document.getElementById("gallery");
     if (gallery) {
       gallery.scrollIntoView({ behavior: "smooth" });
@@ -36,6 +39,7 @@ const Hero = () => {
             href="https://www.facebook.com/people/%F0%9D%99%B5%F0%9D%9A%95%F0%9D%9A%98%F0%9D%9A%A0%F0%9D%9A%8E%F0%9D%9A%9B%F0%9D%9A%9C-%F0%9D%9A%8B%F0%9D%9A%A2-%F0%9D%95%84%F0%9D%95%96%F0%9D%95%9D%F0%9D%95%9A%F0%9D%95%93%F0%9D%95%96%F0%9D%95%96/61578006152375/"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => { try { logEvent(analytics, 'click_social', { platform: 'facebook', location: 'hero' }); } catch (e) {} }}
           >
             <FaFacebook size={20} style={{ marginRight: "6px" }} />
             Flowers by Melibee
@@ -76,6 +80,7 @@ const Hero = () => {
               boxShadow: "none"
             }} 
             onClick={() => {
+              try { logEvent(analytics, 'click_navigation', { destination: 'bolis' }); } catch (e) {}
               const bolis = document.getElementById("bolis");
               if (bolis) bolis.scrollIntoView({ behavior: "smooth" });
             }}

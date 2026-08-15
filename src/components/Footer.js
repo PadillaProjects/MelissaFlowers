@@ -1,5 +1,7 @@
 import React from "react";
 import { FaInstagram, FaFacebook, FaPhone, FaMapMarkerAlt, FaHeart } from "react-icons/fa";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../firebaseConfig";
 import "./Footer.css";
 
 const Footer = () => {
@@ -16,7 +18,7 @@ const Footer = () => {
         <div className="footer-section">
           <h4 className="footer-heading">Contacto</h4>
           <div className="footer-links">
-            <a href="sms:9152074262" className="footer-link">
+            <a href="sms:9152074262" className="footer-link" onClick={() => { try { logEvent(analytics, 'click_contact', { method: 'sms' }); } catch (e) {} }}>
               <FaPhone className="footer-icon" />
               <span>Text: 915-207-4262</span>
             </a>
@@ -35,6 +37,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link social-link"
+              onClick={() => { try { logEvent(analytics, 'click_social', { platform: 'instagram', location: 'footer' }); } catch (e) {} }}
             >
               <FaInstagram className="footer-icon" />
               <span>@melissa_soto3</span>
@@ -44,6 +47,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link social-link"
+              onClick={() => { try { logEvent(analytics, 'click_social', { platform: 'facebook', location: 'footer' }); } catch (e) {} }}
             >
               <FaFacebook className="footer-icon" />
               <span>Flowers by Melibee</span>

@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import ItemCard from "./ItemCard";
 import EnlargedModal from "./EnlargedModal"; // modal is separate now
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../firebaseConfig";
 import "./ItemCardContainer.css";
 
 const ItemCardContainer = ({ items }) => {
@@ -12,6 +14,9 @@ const ItemCardContainer = ({ items }) => {
   const handleSelect = (item) => {
     setSelectedItem(item);
     setCurrentImageIndex(0);
+    try {
+      logEvent(analytics, 'select_item', { item_name: item.name });
+    } catch (e) {}
   };
 
   const handleClose = () => {
