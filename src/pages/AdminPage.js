@@ -283,11 +283,71 @@ const AdminPage = () => {
     }
   };
 
+  const handleRefillImages = async () => {
+    if (!window.confirm("This will upload all multiple images for existing items. It might take a few minutes. Proceed?")) return;
+    setUploading(true);
+    try {
+      const itemsToUpdate = [
+        { name: "Amor Eterno", images: [require("../assets/webp/AmorEterno.webp"), require("../assets/webp/AmorEterno2.webp")] },
+        { name: "Brillo de Sol", images: [require("../assets/webp/BrilloDeSol1.webp"), require("../assets/webp/BrilloDeSol2.webp")] },
+        { name: "Canasta Festiva", images: [require("../assets/webp/CanastaFestiva.webp"), require("../assets/webp/CanastaFestiva2.webp")] },
+        { name: "Centro de Mesa", images: [require("../assets/webp/CentroDeMesa1.webp"), require("../assets/webp/CentroDeMesa2.webp")] },
+        { name: "Encanto Eterno", images: [require("../assets/webp/EncantoEterno1.webp"), require("../assets/webp/EncantoEterno2.webp"), require("../assets/webp/EncantoEterno3.webp")] },
+        { name: "Eventos", images: [require("../assets/webp/Eventos1.webp"), require("../assets/webp/Eventos2.webp"), require("../assets/webp/Eventos3.webp")] },
+        { name: "Flor Eterna Individual", images: [require("../assets/webp/FlorEternaIndividual1.webp"), require("../assets/webp/FlorEternaIndividual2.webp"), require("../assets/webp/FlorEternaIndividual3.webp")] },
+        { name: "Colores de Corazón", images: [require("../assets/webp/Gerveras1.webp"), require("../assets/webp/Gerveras2.webp")] },
+        { name: "Gerveras de Corazón", images: [require("../assets/webp/GerverasDeAmor1.webp"), require("../assets/webp/GerverasDeAmor2.webp")] },
+        { name: "Media Luna", images: [require("../assets/webp/MediaLuna1.webp"), require("../assets/webp/MediaLuna2.webp")] },
+        { name: "Pasión y Elegancia", images: [require("../assets/webp/PasionYElegancia.webp"), require("../assets/webp/PassionYElegancia2.webp")] },
+        { name: "Ramo de Amor de 25", images: [require("../assets/webp/RamoDeAmorDe25_1.webp"), require("../assets/webp/RamoDeAmorDe25_2.webp")] },
+        { name: "Ramo Lila", images: [require("../assets/webp/RamoLila1.webp"), require("../assets/webp/RamoLila2.webp"), require("../assets/webp/RamoLila3.webp")] },
+        { name: "Eterno Romance", images: [require("../assets/webp/Rosas1.webp"), require("../assets/webp/Rosas2.webp")] },
+        { name: "Rosas Eternas", images: [require("../assets/webp/RosasEternas1.webp"), require("../assets/webp/RosasEternas2.webp")] },
+        { name: "Rosas Eternas Con Caja Redonda", images: [require("../assets/webp/RosasEternasConCajaRedonda1.webp"), require("../assets/webp/RosasEternasConCajaRedonda2.webp")] },
+        { name: "Rosas y Tulipanes", images: [require("../assets/webp/RosasYTulipanes1.webp"), require("../assets/webp/RosasYTulipanes2.webp")] },
+        { name: "Sol Eterno", images: [require("../assets/webp/SolEterno.webp"), require("../assets/webp/SolEterno2.webp")] },
+        { name: "Sueño de Princesa", images: [require("../assets/webp/SuenoDePrincesa1.webp"), require("../assets/webp/SuenoDePrincesa2.webp")] }
+      ];
+
+      const itemsSnapshot = await getDocs(collection(db, "items"));
+      const currentItems = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      for (const updateData of itemsToUpdate) {
+        const item = currentItems.find(i => i.name === updateData.name);
+        if (item) {
+          console.log(`Updating ${item.name}...`);
+          const uploadPromises = updateData.images.map(async (imgSrc, index) => {
+            const response = await fetch(imgSrc);
+            const blob = await response.blob();
+            const file = new File([blob], `${item.name.replace(/\s+/g, '')}${index}.webp`, { type: 'image/webp' });
+            return uploadImageToCloudinary(file);
+          });
+          const newImageUrls = await Promise.all(uploadPromises);
+          await updateDoc(doc(db, "items", item.id), {
+            imageUrls: newImageUrls,
+            imageUrl: newImageUrls[0]
+          });
+        }
+      }
+      
+      alert("All multiple images have been successfully uploaded and linked!");
+      fetchData();
+    } catch (error) {
+      console.error("Error refilling images:", error);
+      alert("Error refilling images");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
         <h1>Admin Dashboard</h1>
         <div style={{ display: "flex", gap: "10px" }}>
+          <button onClick={handleRefillImages} disabled={uploading}>
+            {uploading ? "Loading..." : "Refill Images"}
+          </button>
           <button onClick={handlePreloadBolis} disabled={uploading}>
             {uploading ? "Loading..." : "Pre-fill Bolis"}
           </button>
