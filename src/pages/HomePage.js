@@ -29,13 +29,16 @@ const HomePage = () => {
         const itemsSnapshot = await getDocs(collection(db, "items"));
         const itemsData = itemsSnapshot.docs.map(doc => {
           const data = doc.data();
-          const fastUrl = getOptimizedUrl(data.imageUrl, 800);
+          const urls = data.imageUrls || (data.imageUrl ? [data.imageUrl] : []);
+          
           return {
             id: doc.id,
             ...data,
-            // Wrap the single imageUrl in the format ItemCardContainer expects
-            images: data.imageUrl ? [{ webp: fastUrl, fallback: fastUrl }] : [],
-            blurhashes: data.blurhash ? [data.blurhash] : []
+            images: urls.map(url => {
+              const fastUrl = getOptimizedUrl(url, 800);
+              return { webp: fastUrl, fallback: fastUrl };
+            }),
+            blurhashes: data.blurhashes || (data.blurhash ? [data.blurhash] : [])
           };
         });
         

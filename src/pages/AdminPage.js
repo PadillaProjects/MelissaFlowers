@@ -20,7 +20,7 @@ const AdminPage = () => {
   const [newItemDesc, setNewItemDesc] = useState("");
   const [newItemCategory, setNewItemCategory] = useState("");
   const [newCategoryInput, setNewCategoryInput] = useState("");
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
   
   // Form states (Bolis)
   const [newBolisCategoryInput, setNewBolisCategoryInput] = useState("");
@@ -102,22 +102,23 @@ const AdminPage = () => {
 
   const handleAddItem = async (e) => {
     e.preventDefault();
-    if (!newItemName || !newItemCategory || !imageFile) {
-      alert("Please fill in all fields and select an image.");
+    if (!newItemName || !newItemCategory || imageFiles.length === 0) {
+      alert("Please fill in all fields and select at least one image.");
       return;
     }
 
     setUploading(true);
     try {
-      // 1. Upload image to Cloudinary
-      const imageUrl = await uploadImageToCloudinary(imageFile);
+      // 1. Upload multiple images to Cloudinary
+      const uploadPromises = imageFiles.map(file => uploadImageToCloudinary(file));
+      const imageUrls = await Promise.all(uploadPromises);
       
-      // 2. Save item to Firestore
+      // 2. Save item to Firestore with imageUrls array
       await addDoc(collection(db, "items"), {
         name: newItemName,
         description: newItemDesc,
         categoryId: newItemCategory,
-        imageUrl: imageUrl,
+        imageUrls: imageUrls, // Save as array now
         createdAt: new Date()
       });
 
@@ -125,11 +126,65 @@ const AdminPage = () => {
       setNewItemName("");
       setNewItemDesc("");
       setNewItemCategory("");
-      setImageFile(null);
+      setImageFiles([]);
       fetchData();
     } catch (error) {
       console.error("Error adding item:", error);
       alert("Error adding item");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // --- Multiple Image Management Handlers ---
+  const handleReorderItemImage = async (item, currentIndex, direction) => {
+    const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
+    const newIndex = currentIndex + direction;
+    if (newIndex < 0 || newIndex >= urls.length) return;
+    
+    const newUrls = [...urls];
+    const temp = newUrls[currentIndex];
+    newUrls[currentIndex] = newUrls[newIndex];
+    newUrls[newIndex] = temp;
+    
+    try {
+      await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls });
+      fetchData();
+    } catch (e) {
+      console.error(e);
+      alert("Error reordering images");
+    }
+  };
+
+  const handleDeleteItemImage = async (item, index) => {
+    if (!window.confirm("Are you sure you want to delete this image?")) return;
+    const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
+    const newUrls = urls.filter((_, i) => i !== index);
+    
+    try {
+      await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls });
+      fetchData();
+    } catch (e) {
+      console.error(e);
+      alert("Error deleting image");
+    }
+  };
+
+  const handleAddImagesToItem = async (item, files) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      const uploadPromises = Array.from(files).map(file => uploadImageToCloudinary(file));
+      const newUrls = await Promise.all(uploadPromises);
+      const currentUrls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
+      
+      await updateDoc(doc(db, "items", item.id), { 
+        imageUrls: [...currentUrls, ...newUrls].filter(Boolean) 
+      });
+      fetchData();
+    } catch (error) {
+      console.error(error);
+      alert("Error adding images to item");
     } finally {
       setUploading(false);
     }
@@ -341,10 +396,11 @@ const AdminPage = () => {
             <input 
               type="file" 
               accept="image/*" 
-              onChange={(e) => setImageFile(e.target.files[0])} 
+              multiple
+              onChange={(e) => setImageFiles(Array.from(e.target.files))} 
             />
             <button type="submit" disabled={uploading}>
-              {uploading ? "Uploading..." : "Add Item"}
+              {uploading ? "Uploading..." : "Add Item (Multiple Images OK)"}
             </button>
           </form>
         </section>
@@ -353,36 +409,63 @@ const AdminPage = () => {
         <section className="admin-section full-width">
           <h2>Manage Gallery Items</h2>
           <div className="admin-items-grid">
-            {items.map(item => (
-              <div key={item.id} className="admin-item-card">
-                <img src={item.imageUrl} alt={item.name} />
-                <div className="admin-item-details">
-                  <h3>{item.name}</h3>
-                  <select 
-                    value={item.categoryId || ""} 
-                    onChange={async (e) => {
-                      try {
-                        const { doc, updateDoc } = await import("firebase/firestore");
-                        await updateDoc(doc(db, "items", item.id), {
-                          categoryId: e.target.value
-                        });
-                        fetchData();
-                      } catch (err) {
-                        console.error("Error updating category:", err);
-                        alert("Error updating category");
-                      }
-                    }}
-                    style={{ marginBottom: "10px", padding: "5px", width: "100%" }}
-                  >
-                    <option value="">No Category</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+            {items.map(item => {
+              const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
+              return (
+                <div key={item.id} className="admin-item-card">
+                  {/* Render thumbnails horizontally */}
+                  <div style={{ display: "flex", overflowX: "auto", gap: "10px", padding: "10px", borderBottom: "1px solid #eee", backgroundColor: "#fafafa" }}>
+                    {urls.map((url, idx) => (
+                      <div key={idx} style={{ position: "relative", minWidth: "100px", height: "100px" }}>
+                        <img src={url} alt={`${item.name} ${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "5px" }} />
+                        <div style={{ position: "absolute", bottom: "0", left: "0", width: "100%", display: "flex", justifyContent: "space-between", background: "rgba(0,0,0,0.5)" }}>
+                          <button onClick={() => handleReorderItemImage(item, idx, -1)} disabled={idx === 0} style={{ background: "transparent", color: "white", padding: "2px", margin: 0, minWidth: "auto", flex: 1 }}>{"<"}</button>
+                          <button onClick={() => handleDeleteItemImage(item, idx)} style={{ background: "transparent", color: "red", padding: "2px", margin: 0, minWidth: "auto", flex: 1 }}>X</button>
+                          <button onClick={() => handleReorderItemImage(item, idx, 1)} disabled={idx === urls.length - 1} style={{ background: "transparent", color: "white", padding: "2px", margin: 0, minWidth: "auto", flex: 1 }}>{">"}</button>
+                        </div>
+                      </div>
                     ))}
-                  </select>
-                  <button className="delete-btn" onClick={() => handleDeleteItem(item.id)}>Delete</button>
+                    {/* Add More Images Button */}
+                    <div style={{ minWidth: "100px", height: "100px", border: "2px dashed #ccc", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "5px", position: "relative" }}>
+                      <span style={{ fontSize: "2rem", color: "#ccc" }}>+</span>
+                      <input 
+                        type="file" 
+                        multiple 
+                        accept="image/*" 
+                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
+                        onChange={(e) => handleAddImagesToItem(item, e.target.files)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="admin-item-details">
+                    <h3>{item.name}</h3>
+                    <select 
+                      value={item.categoryId || ""} 
+                      onChange={async (e) => {
+                        try {
+                          const { doc, updateDoc } = await import("firebase/firestore");
+                          await updateDoc(doc(db, "items", item.id), {
+                            categoryId: e.target.value
+                          });
+                          fetchData();
+                        } catch (err) {
+                          console.error("Error updating category:", err);
+                          alert("Error updating category");
+                        }
+                      }}
+                      style={{ marginBottom: "10px", padding: "5px", width: "100%" }}
+                    >
+                      <option value="">No Category</option>
+                      {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                      ))}
+                    </select>
+                    <button className="delete-btn" onClick={() => handleDeleteItem(item.id)}>Delete Item Entirely</button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       </div>
