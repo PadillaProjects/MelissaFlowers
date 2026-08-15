@@ -85,8 +85,10 @@ const AdminPage = () => {
       await addDoc(collection(db, "categories"), { name: newCategoryInput });
       setNewCategoryInput("");
       fetchData();
+      alert("Category added successfully!");
     } catch (error) {
       console.error("Error adding category:", error);
+      alert("Error adding category");
     }
   };
 
@@ -95,8 +97,10 @@ const AdminPage = () => {
     try {
       await deleteDoc(doc(db, "items", id));
       fetchData();
+      alert("Item deleted successfully!");
     } catch (error) {
       console.error("Error deleting item:", error);
+      alert("Error deleting item");
     }
   };
 
@@ -128,6 +132,7 @@ const AdminPage = () => {
       setNewItemCategory("");
       setImageFiles([]);
       fetchData();
+      alert("Item added successfully!");
     } catch (error) {
       console.error("Error adding item:", error);
       alert("Error adding item");
@@ -164,6 +169,7 @@ const AdminPage = () => {
     try {
       await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls });
       fetchData();
+      alert("Image deleted successfully!");
     } catch (e) {
       console.error(e);
       alert("Error deleting image");
@@ -182,6 +188,7 @@ const AdminPage = () => {
         imageUrls: [...currentUrls, ...newUrls].filter(Boolean) 
       });
       fetchData();
+      alert("Images added successfully!");
     } catch (error) {
       console.error(error);
       alert("Error adding images to item");
@@ -509,6 +516,7 @@ const AdminPage = () => {
                             categoryId: e.target.value
                           });
                           fetchData();
+                          alert("Category updated successfully!");
                         } catch (err) {
                           console.error("Error updating category:", err);
                           alert("Error updating category");
