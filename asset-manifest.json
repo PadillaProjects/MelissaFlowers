@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.94410336.css",
-    "main.js": "/static/js/main.f51fc814.js",
+    "main.js": "/static/js/main.889d2f93.js",
     "static/media/CentroDeMesa2.webp": "/static/media/CentroDeMesa2.7e9ae32c22532319dcca.webp",
     "static/media/RosasEternas1.webp": "/static/media/RosasEternas1.5ea219b93444f5394e26.webp",
     "static/media/EncantoEterno1.webp": "/static/media/EncantoEterno1.ff055bc92ea6cfe1c03f.webp",
@@ -47,10 +47,10 @@
     "static/media/RosasYTulipanes1.webp": "/static/media/RosasYTulipanes1.0f806099d275a083700b.webp",
     "index.html": "/index.html",
     "main.94410336.css.map": "/static/css/main.94410336.css.map",
-    "main.f51fc814.js.map": "/static/js/main.f51fc814.js.map"
+    "main.889d2f93.js.map": "/static/js/main.889d2f93.js.map"
   },
   "entrypoints": [
     "static/css/main.94410336.css",
-    "static/js/main.f51fc814.js"
+    "static/js/main.889d2f93.js"
   ]
 }
