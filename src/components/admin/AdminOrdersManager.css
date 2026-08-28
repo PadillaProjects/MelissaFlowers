@@ -1,0 +1,94 @@
+.admin-orders-manager {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.orders-filter {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.orders-filter select {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-left: 10px;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.order-status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-pending { background: #ffeeba; color: #856404; }
+.status-completed { background: #d4edda; color: #155724; }
+.status-canceled { background: #f8d7da; color: #721c24; }
+.status-already-paid { background: #cce5ff; color: #004085; }
+.status-delivered-but-need-payment { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+.order-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-details-grid p {
+  margin: 0.5rem 0;
+}
+
+.order-items-list {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.order-items-list li {
+  margin-bottom: 0.5rem;
+}
+
+.order-actions {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-actions select {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}

@@ -3,10 +3,13 @@ import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { uploadImageToCloudinary } from "../services/cloudinary";
+import AdminSalesManager from "../components/admin/AdminSalesManager";
+import AdminOrdersManager from "../components/admin/AdminOrdersManager";
 import "./AdminPage.css";
 
 const AdminPage = () => {
   const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState("gallery");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
@@ -362,8 +365,19 @@ const AdminPage = () => {
         </div>
       </header>
 
+      <div className="admin-tabs" style={{ display: "flex", justifyContent: "center", gap: "20px", margin: "20px 0", borderBottom: "2px solid #eee", paddingBottom: "10px" }}>
+        <button onClick={() => setActiveTab("gallery")} style={{ padding: "10px 20px", background: activeTab === "gallery" ? "#c74c4c" : "white", color: activeTab === "gallery" ? "white" : "black", border: "1px solid #ccc", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}>Gallery Management</button>
+        <button onClick={() => setActiveTab("sales")} style={{ padding: "10px 20px", background: activeTab === "sales" ? "#c74c4c" : "white", color: activeTab === "sales" ? "white" : "black", border: "1px solid #ccc", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}>Bolis Sales Links</button>
+        <button onClick={() => setActiveTab("orders")} style={{ padding: "10px 20px", background: activeTab === "orders" ? "#c74c4c" : "white", color: activeTab === "orders" ? "white" : "black", border: "1px solid #ccc", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}>Orders</button>
+      </div>
+
       <div className="admin-content">
         
+        {activeTab === 'sales' && <AdminSalesManager />}
+        {activeTab === 'orders' && <AdminOrdersManager />}
+
+        {activeTab === 'gallery' && (
+          <>
         {/* BOLIS SECTION */}
         <section className="admin-section full-width" style={{ backgroundColor: "#ffcccc", borderColor: "#ff9999" }}>
           <h2 style={{ color: "#c74c4c" }}>Manage Bolis Menu</h2>
@@ -536,6 +550,8 @@ const AdminPage = () => {
             })}
           </div>
         </section>
+        </>
+        )}
       </div>
     </div>
   );
