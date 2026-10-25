@@ -71,7 +71,8 @@ const Hero = () => {
           <button className="cta-button" onClick={scrollToGallery}>
             Explorar Galería
           </button>
-          <button 
+          {/* Bolis button temporarily hidden */}
+          {/* <button 
             className="cta-button" 
             style={{ 
               background: "transparent", 
@@ -86,7 +87,7 @@ const Hero = () => {
             }}
           >
             Ver Menú de Bolis
-          </button>
+          </button> */}
         </motion.div>
       </div>
     </section>

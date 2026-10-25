@@ -3,55 +3,55 @@ import "./HomePage.css";
 import ItemCardContainer from "../components/ItemCardContainer";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
-import BolisMenu from "../components/BolisMenu";
+// import BolisMenu from "../components/BolisMenu";
 // import ValentineBanner from "../components/ValentineBanner";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { getOptimizedUrl } from "../services/cloudinary";
 
 const HomePage = () => {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [bolisCategories, setBolisCategories] = useState([]);
+  // const [bolisCategories, setBolisCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const catSnapshot = await getDocs(collection(db, "categories"));
-        const catData = catSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setCategories(catData);
+    // 1. Real-time categories listener
+    const unsubCategories = onSnapshot(collection(db, "categories"), (catSnapshot) => {
+      const catData = catSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      setCategories(catData);
+    }, (error) => {
+      console.error("Error listening to categories:", error);
+    });
 
-        const bolisCatSnapshot = await getDocs(collection(db, "bolisCategories"));
-        const bolisCatData = bolisCatSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setBolisCategories(bolisCatData);
-
-        const itemsSnapshot = await getDocs(collection(db, "items"));
-        const itemsData = itemsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          const urls = data.imageUrls || (data.imageUrl ? [data.imageUrl] : []);
-          
-          return {
-            id: doc.id,
-            ...data,
-            images: urls.map(url => {
-              const fastUrl = getOptimizedUrl(url, 800);
-              return { webp: fastUrl, fallback: fastUrl };
-            }),
-            blurhashes: data.blurhashes || (data.blurhash ? [data.blurhash] : [])
-          };
-        });
+    // 2. Real-time items listener
+    const unsubItems = onSnapshot(collection(db, "items"), (itemsSnapshot) => {
+      const itemsData = itemsSnapshot.docs.map(doc => {
+        const data = doc.data();
+        const urls = data.imageUrls || (data.imageUrl ? [data.imageUrl] : []);
         
-        // Sort items by creation date if available, or just use as is
-        setItems(itemsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        return {
+          ...data,
+          id: doc.id,
+          images: urls.map(url => {
+            const fastUrl = getOptimizedUrl(url, 800);
+            return { webp: fastUrl, fallback: fastUrl };
+          }),
+          blurhashes: data.blurhashes || (data.blurhash ? [data.blurhash] : [])
+        };
+      });
+      
+      setItems(itemsData);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error listening to items:", error);
+      setLoading(false);
+    });
 
-    fetchData();
+    return () => {
+      unsubCategories();
+      unsubItems();
+    };
   }, []);
 
   return (
@@ -74,9 +74,35 @@ const HomePage = () => {
         ) : (
           <div className="categories-wrapper">
             {categories.map(category => {
-              const categoryItems = items.filter(item => item.categoryId === category.id);
+              const categoryItems = items.filter(item => {
+                const ids = Array.isArray(item.categoryIds) 
+                  ? item.categoryIds 
+                  : [item.categoryId, item.category].filter(Boolean);
+
+                return (
+                  ids.includes(category.id) ||
+                  ids.includes(category.name) ||
+                  item.categoryId === category.id || 
+                  item.categoryId === category.name ||
+                  item.category === category.name ||
+                  item.category === category.id
+                );
+              });
               if (categoryItems.length === 0) return null;
               
+              // Sort items by custom category itemOrder if configured
+              const orderList = category.itemOrder || [];
+              if (orderList.length > 0) {
+                categoryItems.sort((a, b) => {
+                  const idxA = orderList.indexOf(a.id);
+                  const idxB = orderList.indexOf(b.id);
+                  if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                  if (idxA !== -1) return -1;
+                  if (idxB !== -1) return 1;
+                  return 0;
+                });
+              }
+
               return (
                 <div key={category.id} className="category-group" style={{ marginBottom: '3rem' }}>
                   <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#555', fontSize: '1.5rem' }}>
@@ -88,19 +114,48 @@ const HomePage = () => {
             })}
             
             {/* Items without a category */}
-            {items.filter(item => !item.categoryId).length > 0 && (
+            {items.filter(item => {
+              const ids = Array.isArray(item.categoryIds) 
+                ? item.categoryIds 
+                : [item.categoryId, item.category].filter(Boolean);
+
+              const hasCategory = categories.some(cat => 
+                ids.includes(cat.id) ||
+                ids.includes(cat.name) ||
+                cat.id === item.categoryId || 
+                cat.name === item.categoryId ||
+                cat.name === item.category ||
+                cat.id === item.category
+              );
+              return !hasCategory;
+            }).length > 0 && (
               <div className="category-group" style={{ marginBottom: '3rem' }}>
                 <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#555', fontSize: '1.5rem' }}>
                   Otros
                 </h3>
-                <ItemCardContainer items={items.filter(item => !item.categoryId)} />
+                <ItemCardContainer items={items.filter(item => {
+                  const ids = Array.isArray(item.categoryIds) 
+                    ? item.categoryIds 
+                    : [item.categoryId, item.category].filter(Boolean);
+
+                  const hasCategory = categories.some(cat => 
+                    ids.includes(cat.id) ||
+                    ids.includes(cat.name) ||
+                    cat.id === item.categoryId || 
+                    cat.name === item.categoryId ||
+                    cat.name === item.category ||
+                    cat.id === item.category
+                  );
+                  return !hasCategory;
+                })} />
               </div>
             )}
           </div>
         )}
       </section>
 
-      <BolisMenu bolisCategories={bolisCategories} />
+      {/* Bolis section temporarily hidden */}
+      {/* <BolisMenu bolisCategories={bolisCategories} /> */}
 
       <Footer />
     </div>

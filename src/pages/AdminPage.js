@@ -3,8 +3,34 @@ import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { uploadImageToCloudinary } from "../services/cloudinary";
-import AdminSalesManager from "../components/admin/AdminSalesManager";
 import AdminOrdersManager from "../components/admin/AdminOrdersManager";
+import logoFull from "../assets/melibee-logo-full.png";
+import { 
+  FaImages, 
+  FaShoppingBag, 
+  FaSignOutAlt, 
+  FaSearch, 
+  FaTrash, 
+  FaChevronLeft, 
+  FaChevronRight, 
+  FaPlus, 
+  FaCheck, 
+  FaUpload, 
+  FaTimes, 
+  FaExternalLinkAlt, 
+  FaUserCircle, 
+  FaLock, 
+  FaEnvelope, 
+  FaEye, 
+  FaEyeSlash,
+  FaTag,
+  FaChevronDown,
+  FaChevronUp,
+  FaArrowUp,
+  FaArrowDown,
+  FaExpandAlt,
+  FaCompressAlt
+} from "react-icons/fa";
 import "./AdminPage.css";
 
 const AdminPage = () => {
@@ -12,24 +38,30 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("gallery");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
   
   // Data states
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
-  const [bolisCategories, setBolisCategories] = useState([]);
+  // const [bolisCategories, setBolisCategories] = useState([]);
   
   // Form states (Gallery)
   const [newItemName, setNewItemName] = useState("");
   const [newItemDesc, setNewItemDesc] = useState("");
-  const [newItemCategory, setNewItemCategory] = useState("");
+  const [newItemCategories, setNewItemCategories] = useState([]);
   const [newCategoryInput, setNewCategoryInput] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   
-  // Form states (Bolis)
-  const [newBolisCategoryInput, setNewBolisCategoryInput] = useState("");
-  const [bolisEditData, setBolisEditData] = useState({});
+  // Search & Filter in Gallery Management
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
 
   const [uploading, setUploading] = useState(false);
+  const [expandedItemIds, setExpandedItemIds] = useState([]);
+  const [savingOrder, setSavingOrder] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -42,38 +74,48 @@ const AdminPage = () => {
   }, []);
 
   const fetchData = async () => {
-    // Fetch Categories
-    const catSnapshot = await getDocs(collection(db, "categories"));
-    const catList = catSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setCategories(catList);
+    try {
+      // Fetch Categories
+      const catSnapshot = await getDocs(collection(db, "categories"));
+      const catList = catSnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+      setCategories(catList);
 
-    // Fetch Items
-    const itemsSnapshot = await getDocs(collection(db, "items"));
-    const itemsList = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setItems(itemsList);
-
-    // Fetch Bolis Categories
-    const bolisCatSnapshot = await getDocs(collection(db, "bolisCategories"));
-    const bolisCatList = bolisCatSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setBolisCategories(bolisCatList);
-
-    // Initialize edit data state for Bolis
-    const editData = {};
-    bolisCatList.forEach(cat => {
-      editData[cat.id] = {
-        sizes: cat.sizes ? cat.sizes.join(", ") : "",
-        flavors: cat.flavors ? cat.flavors.join(", ") : ""
-      };
-    });
-    setBolisEditData(editData);
+      // Fetch Items
+      const itemsSnapshot = await getDocs(collection(db, "items"));
+      const itemsList = itemsSnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+      setItems(itemsList);
+    } catch (err) {
+      console.error("Error fetching admin data:", err);
+    }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoginError("");
+    setLoggingIn(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (error) {
-      alert("Error logging in: " + error.message);
+      console.error("Error logging in:", error);
+      let friendlyMessage = "Error al iniciar sesión. Por favor verifica tus credenciales.";
+      if (
+        error.code === "auth/invalid-credential" || 
+        error.code === "auth/wrong-password" || 
+        error.code === "auth/user-not-found"
+      ) {
+        friendlyMessage = "Correo o contraseña incorrectos. Inténtalo de nuevo.";
+      } else if (error.code === "auth/invalid-email") {
+        friendlyMessage = "Por favor ingresa un correo electrónico válido.";
+      } else if (error.code === "auth/too-many-requests") {
+        friendlyMessage = "Demasiados intentos fallidos. Espera unos minutos e inténtalo de nuevo.";
+      } else if (error.code === "auth/unauthorized-domain") {
+        friendlyMessage = "Dominio no autorizado. Ingresa desde http://localhost:3000/#/admin";
+      } else if (error.message) {
+        friendlyMessage = error.message;
+      }
+      setLoginError(friendlyMessage);
+    } finally {
+      setLoggingIn(false);
     }
   };
 
@@ -83,34 +125,64 @@ const AdminPage = () => {
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
-    if (!newCategoryInput) return;
+    if (!newCategoryInput.trim()) return;
     try {
-      await addDoc(collection(db, "categories"), { name: newCategoryInput });
+      await addDoc(collection(db, "categories"), { name: newCategoryInput.trim() });
       setNewCategoryInput("");
-      fetchData();
-      alert("Category added successfully!");
+      await fetchData();
     } catch (error) {
       console.error("Error adding category:", error);
-      alert("Error adding category");
+      alert("Error al agregar la categoría.");
     }
   };
 
-  const handleDeleteItem = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
+  const handleDeleteCategory = async (catId, catName) => {
+    if (!window.confirm(`¿Estás segura de eliminar la categoría "${catName}"?`)) return;
+    try {
+      await deleteDoc(doc(db, "categories", catId));
+      await fetchData();
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      alert("Error al eliminar la categoría.");
+    }
+  };
+
+  const handleDeleteItem = async (id, itemName) => {
+    if (!window.confirm(`¿Estás segura de eliminar "${itemName || 'este arreglo'}" por completo?`)) return;
     try {
       await deleteDoc(doc(db, "items", id));
-      fetchData();
-      alert("Item deleted successfully!");
+      await fetchData();
     } catch (error) {
       console.error("Error deleting item:", error);
-      alert("Error deleting item");
+      alert("Error al eliminar el artículo.");
     }
+  };
+
+  // Image Selection and Previews in Add Form
+  const handleSelectNewImages = (files) => {
+    const fileArray = Array.from(files);
+    setImageFiles(prev => [...prev, ...fileArray]);
+
+    const newPreviews = fileArray.map(file => ({
+      file,
+      url: URL.createObjectURL(file)
+    }));
+    setImagePreviews(prev => [...prev, ...newPreviews]);
+  };
+
+  const handleRemoveNewImagePreview = (index) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => {
+      // revoke object URL
+      if (prev[index]?.url) URL.revokeObjectURL(prev[index].url);
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const handleAddItem = async (e) => {
     e.preventDefault();
-    if (!newItemName || !newItemCategory || imageFiles.length === 0) {
-      alert("Please fill in all fields and select at least one image.");
+    if (!newItemName.trim() || imageFiles.length === 0) {
+      alert("Por favor ingresa el nombre del arreglo y selecciona al menos una imagen.");
       return;
     }
 
@@ -120,31 +192,37 @@ const AdminPage = () => {
       const uploadPromises = imageFiles.map(file => uploadImageToCloudinary(file));
       const imageUrls = await Promise.all(uploadPromises);
       
-      // 2. Save item to Firestore with imageUrls array
+      const primaryCat = categories.find(c => c.id === newItemCategories[0]);
+
+      // 2. Save item to Firestore with categoryIds array
       await addDoc(collection(db, "items"), {
-        name: newItemName,
-        description: newItemDesc,
-        categoryId: newItemCategory,
-        imageUrls: imageUrls, // Save as array now
+        name: newItemName.trim(),
+        description: newItemDesc.trim(),
+        categoryIds: newItemCategories,
+        categoryId: newItemCategories[0] || "",
+        category: primaryCat ? primaryCat.name : "",
+        imageUrls: imageUrls,
         createdAt: new Date()
       });
 
       // Reset form
       setNewItemName("");
       setNewItemDesc("");
-      setNewItemCategory("");
+      setNewItemCategories([]);
       setImageFiles([]);
-      fetchData();
-      alert("Item added successfully!");
+      imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
+      setImagePreviews([]);
+      await fetchData();
+      alert("¡Arreglo agregado exitosamente!");
     } catch (error) {
       console.error("Error adding item:", error);
-      alert("Error adding item");
+      alert("Error al agregar el arreglo.");
     } finally {
       setUploading(false);
     }
   };
 
-  // --- Multiple Image Management Handlers ---
+  // Multiple Image Management Handlers
   const handleReorderItemImage = async (item, currentIndex, direction) => {
     const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
     const newIndex = currentIndex + direction;
@@ -156,26 +234,28 @@ const AdminPage = () => {
     newUrls[newIndex] = temp;
     
     try {
-      await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls });
+      await updateDoc(doc(db, "items", item.id), { 
+        imageUrls: newUrls,
+        imageUrl: newUrls[0] || ""
+      });
       fetchData();
     } catch (e) {
       console.error(e);
-      alert("Error reordering images");
+      alert("Error al reordenar las imágenes.");
     }
   };
 
   const handleDeleteItemImage = async (item, index) => {
-    if (!window.confirm("Are you sure you want to delete this image?")) return;
+    if (!window.confirm("¿Segura que deseas eliminar esta imagen?")) return;
     const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
     const newUrls = urls.filter((_, i) => i !== index);
     
     try {
       await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls });
       fetchData();
-      alert("Image deleted successfully!");
     } catch (e) {
       console.error(e);
-      alert("Error deleting image");
+      alert("Error al eliminar la imagen.");
     }
   };
 
@@ -191,110 +271,72 @@ const AdminPage = () => {
         imageUrls: [...currentUrls, ...newUrls].filter(Boolean) 
       });
       fetchData();
-      alert("Images added successfully!");
     } catch (error) {
       console.error(error);
-      alert("Error adding images to item");
+      alert("Error al agregar imágenes al artículo.");
     } finally {
       setUploading(false);
     }
   };
 
-  // --- Bolis Handlers ---
-  const handleAddBolisCategory = async (e) => {
-    e.preventDefault();
-    if (!newBolisCategoryInput) return;
-    try {
-      await addDoc(collection(db, "bolisCategories"), { 
-        name: newBolisCategoryInput,
-        sizes: [],
-        flavors: []
-      });
-      setNewBolisCategoryInput("");
-      fetchData();
-    } catch (error) {
-      console.error("Error adding bolis category:", error);
+  const getItemCategoryIds = (item) => {
+    const ids = [];
+    if (Array.isArray(item.categoryIds)) {
+      ids.push(...item.categoryIds);
     }
+    // Backward compatibility for items with legacy categoryId / category
+    if (item.categoryId) {
+      const match = categories.find(c => c.id === item.categoryId || c.name === item.categoryId);
+      const catId = match ? match.id : item.categoryId;
+      if (!ids.includes(catId)) ids.push(catId);
+    }
+    if (item.category) {
+      const match = categories.find(c => c.name === item.category || c.id === item.category);
+      if (match && !ids.includes(match.id)) ids.push(match.id);
+    }
+    return ids;
   };
 
-  const handleDeleteBolisCategory = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this Bolis category?")) return;
-    try {
-      await deleteDoc(doc(db, "bolisCategories", id));
-      fetchData();
-    } catch (error) {
-      console.error("Error deleting bolis category:", error);
-    }
-  };
+  const handleToggleItemCategory = async (itemId, categoryId) => {
+    const item = items.find(i => i.id === itemId);
+    if (!item) return;
 
-  const handleUpdateBolisCategory = async (id) => {
-    const data = bolisEditData[id];
-    if (!data) return;
+    const currentIds = getItemCategoryIds(item);
+    const newCategoryIds = currentIds.includes(categoryId)
+      ? currentIds.filter(id => id !== categoryId)
+      : [...currentIds, categoryId];
 
-    try {
-      const sizesArray = data.sizes.split(',').map(s => s.trim()).filter(s => s);
-      const flavorsArray = data.flavors.split(',').map(s => s.trim()).filter(s => s);
-      
-      await updateDoc(doc(db, "bolisCategories", id), {
-        sizes: sizesArray,
-        flavors: flavorsArray
-      });
-      alert("Bolis category updated successfully!");
-      fetchData();
-    } catch (error) {
-      console.error("Error updating bolis category:", error);
-      alert("Error updating bolis category");
-    }
-  };
+    const primaryCat = categories.find(c => c.id === newCategoryIds[0]);
 
-  if (!user) {
-    return (
-      <div className="admin-login-container">
-        <form onSubmit={handleLogin} className="admin-login-form">
-          <h2>Admin Login</h2>
-          <input 
-            type="email" 
-            placeholder="Email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-          />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-          />
-          <button type="submit">Log In</button>
-        </form>
-      </div>
+    // Optimistically update local state immediately so UI changes without delay
+    setItems(prevItems =>
+      prevItems.map(i =>
+        i.id === itemId
+          ? { 
+              ...i, 
+              categoryIds: newCategoryIds,
+              categoryId: newCategoryIds[0] || "",
+              category: primaryCat ? primaryCat.name : ""
+            }
+          : i
+      )
     );
-  }
 
-  const handlePreloadBolis = async () => {
-    if (!window.confirm("Are you sure you want to pre-load the Bolis data from the image?")) return;
-    setUploading(true);
     try {
-      await addDoc(collection(db, "bolisCategories"), { 
-        name: "Bolis De Leche",
-        sizes: ["6oz normal", "3oz mini"],
-        flavors: ["Fresas Con Crema", "Mazapán", "Duvalín", "Nutella", "Coco", "Nuez", "Oreo"]
+      await updateDoc(doc(db, "items", itemId), {
+        categoryIds: newCategoryIds,
+        categoryId: newCategoryIds[0] || "",
+        category: primaryCat ? primaryCat.name : ""
       });
-      await addDoc(collection(db, "bolisCategories"), { 
-        name: "Bolis De Agua",
-        sizes: ["6oz normal", "3oz mini", "10oz large"],
-        flavors: ["Pepino Con Chamoy", "Mangonada", "Limón"]
-      });
-      alert("Bolis data pre-loaded successfully!");
-      fetchData();
-    } catch (error) {
-      console.error("Error pre-loading bolis:", error);
-    } finally {
-      setUploading(false);
+    } catch (err) {
+      console.error("Error updating categories:", err);
+      alert("Error al actualizar las categorías: " + err.message);
+      await fetchData();
     }
   };
 
   const handleRefillImages = async () => {
-    if (!window.confirm("This will upload all multiple images for existing items. It might take a few minutes. Proceed?")) return;
+    if (!window.confirm("Esto optimizará y subirá imágenes para los artículos existentes. ¿Deseas continuar?")) return;
     setUploading(true);
     try {
       const itemsToUpdate = [
@@ -320,12 +362,11 @@ const AdminPage = () => {
       ];
 
       const itemsSnapshot = await getDocs(collection(db, "items"));
-      const currentItems = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const currentItems = itemsSnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
 
       for (const updateData of itemsToUpdate) {
         const item = currentItems.find(i => i.name === updateData.name);
         if (item) {
-          console.log(`Updating ${item.name}...`);
           const uploadPromises = updateData.images.map(async (imgSrc, index) => {
             const response = await fetch(imgSrc);
             const blob = await response.blob();
@@ -340,219 +381,787 @@ const AdminPage = () => {
         }
       }
       
-      alert("All multiple images have been successfully uploaded and linked!");
+      alert("¡Todas las imágenes han sido sincronizadas y optimizadas!");
       fetchData();
     } catch (error) {
       console.error("Error refilling images:", error);
-      alert("Error refilling images");
+      alert("Error al procesar las imágenes.");
     } finally {
       setUploading(false);
     }
   };
 
-  return (
-    <div className="admin-dashboard">
-      <header className="admin-header">
-        <h1>Admin Dashboard</h1>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button onClick={handleRefillImages} disabled={uploading}>
-            {uploading ? "Loading..." : "Refill Images"}
-          </button>
-          <button onClick={handlePreloadBolis} disabled={uploading}>
-            {uploading ? "Loading..." : "Pre-fill Bolis"}
-          </button>
-          <button onClick={handleLogout}>Log Out</button>
-        </div>
-      </header>
+  // Collapse / Expand handlers
+  const toggleItemExpanded = (itemId) => {
+    setExpandedItemIds(prev => 
+      prev.includes(itemId) ? prev.filter(id => id !== itemId) : [...prev, itemId]
+    );
+  };
 
-      <div className="admin-tabs" style={{ display: "flex", justifyContent: "center", gap: "20px", margin: "20px 0", borderBottom: "2px solid #eee", paddingBottom: "10px" }}>
-        <button onClick={() => setActiveTab("gallery")} style={{ padding: "10px 20px", background: activeTab === "gallery" ? "#c74c4c" : "white", color: activeTab === "gallery" ? "white" : "black", border: "1px solid #ccc", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}>Gallery Management</button>
-        <button onClick={() => setActiveTab("sales")} style={{ padding: "10px 20px", background: activeTab === "sales" ? "#c74c4c" : "white", color: activeTab === "sales" ? "white" : "black", border: "1px solid #ccc", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}>Bolis Sales Links</button>
-        <button onClick={() => setActiveTab("orders")} style={{ padding: "10px 20px", background: activeTab === "orders" ? "#c74c4c" : "white", color: activeTab === "orders" ? "white" : "black", border: "1px solid #ccc", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}>Orders</button>
-      </div>
+  const handleExpandAll = (allIds) => {
+    setExpandedItemIds(allIds);
+  };
 
-      <div className="admin-content">
-        
-        {activeTab === 'sales' && <AdminSalesManager />}
-        {activeTab === 'orders' && <AdminOrdersManager />}
+  const handleCollapseAll = () => {
+    setExpandedItemIds([]);
+  };
 
-        {activeTab === 'gallery' && (
-          <>
-        {/* BOLIS SECTION */}
-        <section className="admin-section full-width" style={{ backgroundColor: "#ffcccc", borderColor: "#ff9999" }}>
-          <h2 style={{ color: "#c74c4c" }}>Manage Bolis Menu</h2>
+  // Reordering items within the selected category
+  const handleMoveItemOrder = async (itemId, direction) => {
+    if (filterCategory === "all" || filterCategory === "uncategorized") {
+      alert("Por favor selecciona una categoría específica en el filtro superior para ordenar los arreglos.");
+      return;
+    }
+
+    const selectedCat = categories.find(c => c.id === filterCategory);
+    if (!selectedCat) return;
+
+    // All items that currently belong to this category
+    const catItems = items.filter(i => getItemCategoryIds(i).includes(filterCategory));
+    const existingOrder = Array.isArray(selectedCat.itemOrder) ? selectedCat.itemOrder : [];
+
+    // Assemble current full order: existing valid IDs first, then any unranked category items
+    const currentOrder = [
+      ...existingOrder.filter(id => catItems.some(i => i.id === id)),
+      ...catItems.filter(i => !existingOrder.includes(i.id)).map(i => i.id)
+    ];
+
+    const currentIndex = currentOrder.indexOf(itemId);
+    if (currentIndex === -1) return;
+
+    const targetIndex = currentIndex + direction;
+    if (targetIndex < 0 || targetIndex >= currentOrder.length) return;
+
+    // Swap elements
+    const newOrder = [...currentOrder];
+    const temp = newOrder[currentIndex];
+    newOrder[currentIndex] = newOrder[targetIndex];
+    newOrder[targetIndex] = temp;
+
+    // Optimistic state update
+    setCategories(prev => prev.map(c => 
+      c.id === filterCategory ? { ...c, itemOrder: newOrder } : c
+    ));
+
+    setSavingOrder(true);
+    try {
+      await updateDoc(doc(db, "categories", filterCategory), {
+        itemOrder: newOrder
+      });
+    } catch (err) {
+      console.error("Error saving category order:", err);
+      alert("No se pudo guardar el nuevo orden. Inténtalo de nuevo.");
+      // Revert optimistic state
+      setCategories(prev => prev.map(c => 
+        c.id === filterCategory ? { ...c, itemOrder: existingOrder } : c
+      ));
+    } finally {
+      setSavingOrder(false);
+    }
+  };
+
+  // Filtered & Sorted Items for Manage Items Section
+  const filteredItems = (() => {
+    const list = items.filter(item => {
+      const matchesSearch = !searchQuery.trim() || 
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      if (!matchesSearch) return false;
+
+      if (filterCategory === "all") return true;
+      if (filterCategory === "uncategorized") {
+        return getItemCategoryIds(item).length === 0;
+      }
+      return getItemCategoryIds(item).includes(filterCategory);
+    });
+
+    if (filterCategory !== "all" && filterCategory !== "uncategorized") {
+      const selectedCat = categories.find(c => c.id === filterCategory);
+      const order = Array.isArray(selectedCat?.itemOrder) ? selectedCat.itemOrder : [];
+      if (order.length > 0) {
+        return [...list].sort((a, b) => {
+          const idxA = order.indexOf(a.id);
+          const idxB = order.indexOf(b.id);
+          if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+          if (idxA !== -1) return -1;
+          if (idxB !== -1) return 1;
+          return 0;
+        });
+      }
+    }
+    return list;
+  })();
+
+  // ==========================================================================
+  // RENDER LOGIN SCREEN (if not logged in)
+  // ==========================================================================
+  if (!user) {
+    return (
+      <div className="admin-login-container">
+        <div className="admin-login-card">
+          <img 
+            src={logoFull} 
+            alt="Melibee Flowers" 
+            className="admin-login-logo" 
+          />
+          <h1 className="admin-login-title">Galería de Melissa</h1>
+          <p className="admin-login-subtitle">Panel de Control & Administración</p>
           
-          <form onSubmit={handleAddBolisCategory} className="admin-form" style={{ marginBottom: "2rem" }}>
-            <input 
-              type="text" 
-              placeholder="New Bolis Category (e.g. Bolis De Leche)" 
-              value={newBolisCategoryInput} 
-              onChange={(e) => setNewBolisCategoryInput(e.target.value)} 
-            />
-            <button type="submit" style={{ backgroundColor: "#c74c4c" }}>Add Bolis Category</button>
-          </form>
+          <form onSubmit={handleLogin} className="admin-login-form">
+            {loginError && (
+              <div className="login-error-message" role="alert">
+                <span>{loginError}</span>
+              </div>
+            )}
+            
+            <div className="admin-input-group">
+              <label className="admin-input-label" htmlFor="admin-email">Correo Electrónico</label>
+              <div className="admin-input-wrapper">
+                <FaEnvelope className="admin-input-icon" />
+                <input 
+                  id="admin-email"
+                  type="email" 
+                  placeholder="admin@melibee.art" 
+                  value={email} 
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (loginError) setLoginError("");
+                  }} 
+                  className="admin-input-field"
+                  required
+                />
+              </div>
+            </div>
 
-          <div className="bolis-admin-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "20px" }}>
-            {bolisCategories.map(cat => (
-              <div key={cat.id} style={{ backgroundColor: "white", padding: "1.5rem", borderRadius: "10px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                  <h3 style={{ margin: 0, color: "#c74c4c" }}>{cat.name}</h3>
-                  <button onClick={() => handleDeleteBolisCategory(cat.id)} style={{ backgroundColor: "#ff4d4d", padding: "5px 10px", fontSize: "0.9rem" }}>Delete Category</button>
-                </div>
-                
-                <div style={{ marginBottom: "1rem" }}>
-                  <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>Sizes (comma separated)</label>
-                  <input 
-                    type="text" 
-                    value={bolisEditData[cat.id]?.sizes || ""} 
-                    onChange={(e) => setBolisEditData({...bolisEditData, [cat.id]: { ...bolisEditData[cat.id], sizes: e.target.value }})}
-                    placeholder="e.g. 6oz normal, 3oz mini"
-                    style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: "1rem" }}>
-                  <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>Flavors (comma separated)</label>
-                  <textarea 
-                    value={bolisEditData[cat.id]?.flavors || ""} 
-                    onChange={(e) => setBolisEditData({...bolisEditData, [cat.id]: { ...bolisEditData[cat.id], flavors: e.target.value }})}
-                    placeholder="e.g. Fresas Con Crema, Mazapán, Duvalín"
-                    style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #ccc", minHeight: "80px" }}
-                  />
-                </div>
-
-                <button onClick={() => handleUpdateBolisCategory(cat.id)} style={{ backgroundColor: "#ff9999", color: "white" }}>
-                  Save Updates
+            <div className="admin-input-group">
+              <label className="admin-input-label" htmlFor="admin-password">Contraseña</label>
+              <div className="admin-input-wrapper">
+                <FaLock className="admin-input-icon" />
+                <input 
+                  id="admin-password"
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="••••••••" 
+                  value={password} 
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (loginError) setLoginError("");
+                  }} 
+                  className="admin-input-field"
+                  required
+                />
+                <button 
+                  type="button" 
+                  className="admin-input-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
 
-        {/* GALLERY CATEGORIES SECTION */}
-        <section className="admin-section">
-          <h2>Add Gallery Category</h2>
-          <form onSubmit={handleAddCategory} className="admin-form">
-            <input 
-              type="text" 
-              placeholder="New Category Name" 
-              value={newCategoryInput} 
-              onChange={(e) => setNewCategoryInput(e.target.value)} 
-            />
-            <button type="submit">Add Category</button>
-          </form>
-          
-          <ul className="category-list">
-            {categories.map(cat => (
-              <li key={cat.id}>{cat.name}</li>
-            ))}
-          </ul>
-        </section>
-
-        {/* GALLERY ITEMS SECTION */}
-        <section className="admin-section">
-          <h2>Add Gallery Item</h2>
-          <form onSubmit={handleAddItem} className="admin-form">
-            <input 
-              type="text" 
-              placeholder="Item Name" 
-              value={newItemName} 
-              onChange={(e) => setNewItemName(e.target.value)} 
-            />
-            <input 
-              type="text" 
-              placeholder="Description (Optional)" 
-              value={newItemDesc} 
-              onChange={(e) => setNewItemDesc(e.target.value)} 
-            />
-            <select 
-              value={newItemCategory} 
-              onChange={(e) => setNewItemCategory(e.target.value)}
-            >
-              <option value="">Select Category</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-            <input 
-              type="file" 
-              accept="image/*" 
-              multiple
-              onChange={(e) => setImageFiles(Array.from(e.target.files))} 
-            />
-            <button type="submit" disabled={uploading}>
-              {uploading ? "Uploading..." : "Add Item (Multiple Images OK)"}
+            <button type="submit" disabled={loggingIn} className="admin-login-btn">
+              {loggingIn ? "Iniciando sesión..." : "Iniciar Sesión"}
             </button>
           </form>
-        </section>
 
-        {/* MANAGE GALLERY ITEMS SECTION */}
-        <section className="admin-section full-width">
-          <h2>Manage Gallery Items</h2>
-          <div className="admin-items-grid">
-            {items.map(item => {
-              const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
-              return (
-                <div key={item.id} className="admin-item-card">
-                  {/* Render thumbnails horizontally */}
-                  <div style={{ display: "flex", overflowX: "auto", gap: "10px", padding: "10px", borderBottom: "1px solid #eee", backgroundColor: "#fafafa" }}>
-                    {urls.map((url, idx) => (
-                      <div key={idx} style={{ position: "relative", minWidth: "100px", height: "100px" }}>
-                        <img src={url} alt={`${item.name} ${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "5px" }} />
-                        <div style={{ position: "absolute", bottom: "0", left: "0", width: "100%", display: "flex", justifyContent: "space-between", background: "rgba(0,0,0,0.5)" }}>
-                          <button onClick={() => handleReorderItemImage(item, idx, -1)} disabled={idx === 0} style={{ background: "transparent", color: "white", padding: "2px", margin: 0, minWidth: "auto", flex: 1 }}>{"<"}</button>
-                          <button onClick={() => handleDeleteItemImage(item, idx)} style={{ background: "transparent", color: "red", padding: "2px", margin: 0, minWidth: "auto", flex: 1 }}>X</button>
-                          <button onClick={() => handleReorderItemImage(item, idx, 1)} disabled={idx === urls.length - 1} style={{ background: "transparent", color: "white", padding: "2px", margin: 0, minWidth: "auto", flex: 1 }}>{">"}</button>
-                        </div>
-                      </div>
-                    ))}
-                    {/* Add More Images Button */}
-                    <div style={{ minWidth: "100px", height: "100px", border: "2px dashed #ccc", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "5px", position: "relative" }}>
-                      <span style={{ fontSize: "2rem", color: "#ccc" }}>+</span>
-                      <input 
-                        type="file" 
-                        multiple 
-                        accept="image/*" 
-                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
-                        onChange={(e) => handleAddImagesToItem(item, e.target.files)}
-                      />
+          <a href="#/" className="admin-back-link">
+            ← Volver a la Galería Pública
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================================================
+  // RENDER ADMIN DASHBOARD (when authenticated)
+  // ==========================================================================
+  return (
+    <div className="admin-dashboard">
+      {/* Top Navbar */}
+      <nav className="admin-navbar">
+        <div className="admin-navbar-inner">
+          <div className="admin-brand">
+            <img src={logoFull} alt="Logo" className="admin-brand-icon" />
+            <div className="admin-brand-text">
+              <span className="admin-brand-name">Galería de Melissa</span>
+              <span className="admin-brand-badge">Panel de Control</span>
+            </div>
+          </div>
+
+          <div className="admin-tabs-nav" role="tablist">
+            <button 
+              role="tab"
+              aria-selected={activeTab === "gallery"}
+              className={`admin-tab-btn ${activeTab === "gallery" ? "active" : ""}`}
+              onClick={() => setActiveTab("gallery")}
+            >
+              <FaImages />
+              <span>Galería Floral</span>
+            </button>
+            <button 
+              role="tab"
+              aria-selected={activeTab === "orders"}
+              className={`admin-tab-btn ${activeTab === "orders" ? "active" : ""}`}
+              onClick={() => setActiveTab("orders")}
+            >
+              <FaShoppingBag />
+              <span>Pedidos</span>
+            </button>
+          </div>
+
+          <div className="admin-nav-actions">
+            <span className="admin-user-badge" title={user.email}>
+              <FaUserCircle />
+              <span>{user.email?.split('@')[0]}</span>
+            </span>
+
+            <a 
+              href="#/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="admin-btn-secondary"
+              title="Abrir tienda en nueva pestaña"
+            >
+              <FaExternalLinkAlt style={{ fontSize: '0.8rem' }} />
+              <span>Ver Tienda</span>
+            </a>
+
+            <button 
+              onClick={handleRefillImages} 
+              disabled={uploading} 
+              className="admin-btn-secondary"
+              title="Resincronizar imágenes WebP"
+            >
+              {uploading ? "Procesando..." : "Sincronizar"}
+            </button>
+
+            <button 
+              onClick={handleLogout} 
+              className="admin-btn-danger-ghost"
+              title="Cerrar sesión de administrador"
+            >
+              <FaSignOutAlt />
+              <span>Salir</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <main className="admin-container">
+        {/* Orders Tab */}
+        {activeTab === 'orders' && <AdminOrdersManager />}
+
+        {/* Gallery Management Tab */}
+        {activeTab === 'gallery' && (
+          <>
+            {/* Quick Stats Overview */}
+            <div className="admin-overview-grid">
+              <div className="admin-stat-card">
+                <div className="admin-stat-icon-wrap">
+                  <FaImages />
+                </div>
+                <div className="admin-stat-info">
+                  <span className="admin-stat-label">Total Arreglos</span>
+                  <span className="admin-stat-number">{items.length}</span>
+                </div>
+              </div>
+
+              <div className="admin-stat-card">
+                <div className="admin-stat-icon-wrap">
+                  <FaTag />
+                </div>
+                <div className="admin-stat-info">
+                  <span className="admin-stat-label">Categorías</span>
+                  <span className="admin-stat-number">{categories.length}</span>
+                </div>
+              </div>
+
+              <div className="admin-stat-card">
+                <div className="admin-stat-icon-wrap">
+                  <FaCheck />
+                </div>
+                <div className="admin-stat-info">
+                  <span className="admin-stat-label">Con Categoría</span>
+                  <span className="admin-stat-number">
+                    {items.filter(i => getItemCategoryIds(i).length > 0).length}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Creation Grid: Add Item + Manage Categories */}
+            <div className="admin-grid-two-col">
+              {/* Form: Add Gallery Item */}
+              <section className="admin-card">
+                <div className="admin-card-header">
+                  <h2 className="admin-card-title">
+                    <FaPlus /> Nuevo Arreglo Floral
+                  </h2>
+                </div>
+
+                <form onSubmit={handleAddItem}>
+                  <div className="admin-form-group">
+                    <label className="admin-form-label" htmlFor="new-item-name">Nombre del Arreglo *</label>
+                    <input 
+                      id="new-item-name"
+                      type="text" 
+                      placeholder="Ej. Ramo Romántico de Rosas" 
+                      value={newItemName} 
+                      onChange={(e) => setNewItemName(e.target.value)}
+                      className="admin-form-control"
+                      required
+                    />
+                  </div>
+
+                  <div className="admin-form-group">
+                    <label className="admin-form-label" htmlFor="new-item-desc">Descripción (Opcional)</label>
+                    <textarea 
+                      id="new-item-desc"
+                      placeholder="Detalles florales, tamaño, ocasiones especiales..." 
+                      value={newItemDesc} 
+                      onChange={(e) => setNewItemDesc(e.target.value)}
+                      className="admin-form-control"
+                    />
+                  </div>
+
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">
+                      Categorías (Selecciona una o más):
+                    </label>
+                    <div className="admin-category-chips">
+                      {categories.map(cat => {
+                        const isSelected = newItemCategories.includes(cat.id);
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => {
+                              setNewItemCategories(prev =>
+                                prev.includes(cat.id)
+                                  ? prev.filter(id => id !== cat.id)
+                                  : [...prev, cat.id]
+                              );
+                            }}
+                            className={`admin-cat-chip-btn ${isSelected ? "selected" : ""}`}
+                          >
+                            {isSelected ? <FaCheck style={{ fontSize: '0.75rem' }} /> : <FaPlus style={{ fontSize: '0.75rem' }} />}
+                            {cat.name}
+                          </button>
+                        );
+                      })}
+                      {categories.length === 0 && (
+                        <span style={{ fontSize: '0.85rem', color: 'var(--admin-text-light)' }}>
+                          No hay categorías creadas aún.
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <div className="admin-item-details">
-                    <h3>{item.name}</h3>
-                    <select 
-                      value={item.categoryId || ""} 
-                      onChange={async (e) => {
-                        try {
-                          const { doc, updateDoc } = await import("firebase/firestore");
-                          await updateDoc(doc(db, "items", item.id), {
-                            categoryId: e.target.value
-                          });
-                          fetchData();
-                          alert("Category updated successfully!");
-                        } catch (err) {
-                          console.error("Error updating category:", err);
-                          alert("Error updating category");
-                        }
-                      }}
-                      style={{ marginBottom: "10px", padding: "5px", width: "100%" }}
-                    >
-                      <option value="">No Category</option>
-                      {categories.map(cat => (
-                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                      ))}
-                    </select>
-                    <button className="delete-btn" onClick={() => handleDeleteItem(item.id)}>Delete Item Entirely</button>
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Fotografías del Arreglo *</label>
+                    <div className="admin-file-dropzone">
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        multiple
+                        onChange={(e) => handleSelectNewImages(e.target.files)}
+                      />
+                      <div className="admin-file-dropzone-content">
+                        <FaUpload className="admin-file-dropzone-icon" />
+                        <span className="admin-file-dropzone-text">Selecciona o arrastra imágenes aquí</span>
+                        <span className="admin-file-dropzone-subtext">Puedes subir varias fotos del mismo arreglo</span>
+                      </div>
+                    </div>
+
+                    {imagePreviews.length > 0 && (
+                      <div className="admin-upload-previews">
+                        {imagePreviews.map((preview, idx) => (
+                          <div key={idx} className="admin-upload-thumb">
+                            <img src={preview.url} alt={`Preview ${idx}`} />
+                            <button 
+                              type="button" 
+                              onClick={() => handleRemoveNewImagePreview(idx)}
+                              className="admin-upload-thumb-remove"
+                              title="Quitar imagen"
+                            >
+                              <FaTimes />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    disabled={uploading || imageFiles.length === 0} 
+                    className="admin-btn-primary"
+                    style={{ width: '100%', marginTop: '0.5rem' }}
+                  >
+                    {uploading ? "Subiendo fotos y guardando..." : "Publicar Arreglo en Galería"}
+                  </button>
+                </form>
+              </section>
+
+              {/* Card: Manage Categories */}
+              <section className="admin-card">
+                <div className="admin-card-header">
+                  <h2 className="admin-card-title">
+                    <FaTag /> Categorías ({categories.length})
+                  </h2>
+                </div>
+
+                <form onSubmit={handleAddCategory} className="admin-category-form">
+                  <input 
+                    type="text" 
+                    placeholder="Nueva categoría (ej. Ramos)" 
+                    value={newCategoryInput} 
+                    onChange={(e) => setNewCategoryInput(e.target.value)} 
+                    className="admin-form-control"
+                    aria-label="Nombre de la nueva categoría"
+                  />
+                  <button type="submit" className="admin-btn-primary">
+                    <FaPlus /> Agregar
+                  </button>
+                </form>
+
+                <ul className="admin-category-manage-list">
+                  {categories.map(cat => {
+                    const itemCount = items.filter(i => getItemCategoryIds(i).includes(cat.id)).length;
+                    return (
+                      <li key={cat.id} className="admin-category-manage-item">
+                        <div className="admin-cat-name-wrap">
+                          <span>{cat.name}</span>
+                          <span className="admin-cat-count-badge">
+                            {itemCount} {itemCount === 1 ? 'arreglo' : 'arreglos'}
+                          </span>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => handleDeleteCategory(cat.id, cat.name)}
+                          className="admin-btn-danger-ghost"
+                          style={{ padding: '4px 8px', fontSize: '0.75rem' }}
+                          title={`Eliminar categoría ${cat.name}`}
+                        >
+                          <FaTrash />
+                        </button>
+                      </li>
+                    );
+                  })}
+                  {categories.length === 0 && (
+                    <li style={{ textAlign: 'center', color: 'var(--admin-text-light)', padding: '1.5rem 0' }}>
+                      No hay categorías registradas.
+                    </li>
+                  )}
+                </ul>
+              </section>
+            </div>
+
+            {/* Collection Items Section */}
+            <section className="admin-collection-section">
+              <div className="admin-collection-header">
+                <div>
+                  <h2 className="admin-card-title" style={{ fontSize: '1.5rem' }}>
+                    Colección de Arreglos Florales
+                  </h2>
+                  <div className="admin-collection-subbar">
+                    <span style={{ fontSize: '0.88rem', color: 'var(--admin-text-muted)' }}>
+                      Mostrando {filteredItems.length} de {items.length} arreglos
+                    </span>
+                    <div className="admin-expand-tools">
+                      <button 
+                        type="button" 
+                        onClick={() => handleExpandAll(filteredItems.map(i => i.id))}
+                        className="admin-btn-link"
+                        title="Expandir todas las tarjetas"
+                      >
+                        <FaExpandAlt style={{ fontSize: '0.75rem' }} />
+                        <span>Expandir todos</span>
+                      </button>
+                      <span className="admin-tool-sep">|</span>
+                      <button 
+                        type="button" 
+                        onClick={handleCollapseAll}
+                        className="admin-btn-link"
+                        title="Colapsar todas las tarjetas"
+                      >
+                        <FaCompressAlt style={{ fontSize: '0.75rem' }} />
+                        <span>Colapsar todos</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </section>
-        </>
+
+                <div className="admin-collection-tools">
+                  <div className="admin-search-wrap">
+                    <FaSearch className="admin-search-icon" />
+                    <input 
+                      type="text"
+                      placeholder="Buscar por nombre..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="admin-search-input"
+                      aria-label="Buscar arreglo por nombre"
+                    />
+                  </div>
+
+                  <select 
+                    value={filterCategory} 
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="admin-filter-select"
+                    aria-label="Filtrar por categoría"
+                  >
+                    <option value="all">Todas las Categorías</option>
+                    <option value="uncategorized">Sin Categoría ("Otros")</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Category Reordering Guide Banner */}
+              {filterCategory !== "all" && filterCategory !== "uncategorized" ? (
+                <div className="admin-order-banner active">
+                  <span className="admin-order-banner-icon">✨</span>
+                  <div className="admin-order-banner-text">
+                    <strong>Ordenando categoría "{categories.find(c => c.id === filterCategory)?.name}":</strong>
+                    <span> Usa las flechas <strong>↑</strong> y <strong>↓</strong> para definir el orden en la tienda. Se guarda automáticamente.</span>
+                  </div>
+                  {savingOrder && <span className="admin-order-saving-pill">Guardando...</span>}
+                </div>
+              ) : (
+                <div className="admin-order-banner hint">
+                  <span className="admin-order-banner-icon">💡</span>
+                  <div className="admin-order-banner-text">
+                    <span>Selecciona una categoría específica en el filtro superior para ordenar la posición de sus arreglos en la tienda.</span>
+                  </div>
+                </div>
+              )}
+
+              {filteredItems.length === 0 ? (
+                <div className="admin-empty-state">
+                  <FaImages className="admin-empty-state-icon" />
+                  <p>No se encontraron arreglos con los filtros actuales.</p>
+                </div>
+              ) : (
+                <div className="admin-items-list">
+                  {filteredItems.map((item, idx) => {
+                    const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
+                    const assignedCatIds = getItemCategoryIds(item);
+                    const isExpanded = expandedItemIds.includes(item.id);
+                    const isCategorySelected = filterCategory !== "all" && filterCategory !== "uncategorized";
+
+                    return (
+                      <article 
+                        key={item.id} 
+                        className={`admin-item-card ${isExpanded ? "expanded" : "collapsed"}`}
+                      >
+                        {/* Compact Card Header (Always visible - Click to toggle) */}
+                        <div 
+                          className="admin-item-card-header"
+                          onClick={() => toggleItemExpanded(item.id)}
+                          role="button"
+                          tabIndex={0}
+                          aria-expanded={isExpanded}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              toggleItemExpanded(item.id);
+                            }
+                          }}
+                        >
+                          <div className="admin-item-header-left">
+                            {/* Reorder controls (when specific category chosen) */}
+                            {isCategorySelected && (
+                              <div 
+                                className="admin-item-order-controls" 
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <span className="admin-item-rank-badge">#{idx + 1}</span>
+                                <div className="admin-order-arrows">
+                                  <button 
+                                    type="button"
+                                    className="admin-order-btn"
+                                    disabled={idx === 0 || savingOrder}
+                                    onClick={() => handleMoveItemOrder(item.id, -1)}
+                                    title="Mover hacia arriba"
+                                    aria-label={`Mover ${item.name} hacia arriba`}
+                                  >
+                                    <FaArrowUp />
+                                  </button>
+                                  <button 
+                                    type="button"
+                                    className="admin-order-btn"
+                                    disabled={idx === filteredItems.length - 1 || savingOrder}
+                                    onClick={() => handleMoveItemOrder(item.id, 1)}
+                                    title="Mover hacia abajo"
+                                    aria-label={`Mover ${item.name} hacia abajo`}
+                                  >
+                                    <FaArrowDown />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Arrangement Thumbnail Preview */}
+                            <div className="admin-item-avatar-wrap">
+                              {urls[0] ? (
+                                <img src={urls[0]} alt={item.name} className="admin-item-avatar-img" />
+                              ) : (
+                                <div className="admin-item-avatar-placeholder">
+                                  <FaImages />
+                                </div>
+                              )}
+                              <span className="admin-item-photos-badge" title={`${urls.length} fotos`}>
+                                {urls.length}
+                              </span>
+                            </div>
+
+                            {/* Arrangement Name & Category Tags */}
+                            <div className="admin-item-title-meta">
+                              <h3 className="admin-item-name">{item.name}</h3>
+                              <div className="admin-item-mini-categories">
+                                {assignedCatIds.length === 0 ? (
+                                  <span className="admin-cat-chip uncategorized">Sin categoría</span>
+                                ) : (
+                                  assignedCatIds.map(catId => {
+                                    const catObj = categories.find(c => c.id === catId);
+                                    return catObj ? (
+                                      <span key={catId} className="admin-cat-chip">
+                                        {catObj.name}
+                                      </span>
+                                    ) : null;
+                                  })
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Right: Expand/Collapse Chevron */}
+                          <div className="admin-item-header-right">
+                            <span className="admin-item-toggle-hint">
+                              {isExpanded ? "Colapsar" : "Editar"}
+                            </span>
+                            <div className="admin-item-expand-btn">
+                              {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Collapsible Card Body */}
+                        {isExpanded && (
+                          <div className="admin-item-card-body">
+                            {/* Image Thumbnails Strip with Reordering & Deletion */}
+                            <div className="admin-item-gallery-strip">
+                              {urls.map((url, imgIdx) => (
+                                <div key={imgIdx} className="admin-item-thumb-box">
+                                  <img src={url} alt={`${item.name} foto ${imgIdx + 1}`} loading="lazy" />
+                                  <div className="admin-item-thumb-controls">
+                                    <button 
+                                      onClick={() => handleReorderItemImage(item, imgIdx, -1)} 
+                                      disabled={imgIdx === 0} 
+                                      className="admin-thumb-action-btn"
+                                      title="Mover a la izquierda"
+                                      aria-label="Mover imagen hacia la izquierda"
+                                    >
+                                      <FaChevronLeft />
+                                    </button>
+                                    <button 
+                                      onClick={() => handleDeleteItemImage(item, imgIdx)} 
+                                      className="admin-thumb-action-btn delete"
+                                      title="Eliminar foto"
+                                      aria-label="Eliminar esta foto"
+                                    >
+                                      <FaTimes />
+                                    </button>
+                                    <button 
+                                      onClick={() => handleReorderItemImage(item, imgIdx, 1)} 
+                                      disabled={imgIdx === urls.length - 1} 
+                                      className="admin-thumb-action-btn"
+                                      title="Mover a la derecha"
+                                      aria-label="Mover imagen hacia la derecha"
+                                    >
+                                      <FaChevronRight />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+
+                              {/* Add More Photos Dropzone */}
+                              <div className="admin-item-thumb-add">
+                                <input 
+                                  type="file" 
+                                  multiple 
+                                  accept="image/*" 
+                                  onChange={(e) => handleAddImagesToItem(item, e.target.files)}
+                                  aria-label={`Agregar más fotos a ${item.name}`}
+                                />
+                                <FaPlus className="admin-item-thumb-add-icon" />
+                                <span className="admin-item-thumb-add-text">+ Foto</span>
+                              </div>
+                            </div>
+
+                            {/* Details: Description & Multi-Category Selection */}
+                            <div className="admin-item-body-details">
+                              {item.description && (
+                                <div className="admin-item-desc-box">
+                                  <span className="admin-item-section-label">Descripción:</span>
+                                  <p className="admin-item-desc">{item.description}</p>
+                                </div>
+                              )}
+
+                              <div className="admin-item-cats-section">
+                                <span className="admin-item-section-label">Categorías (asigna una o más):</span>
+                                <div className="admin-item-cats-chips">
+                                  {categories.map(cat => {
+                                    const isAssigned = assignedCatIds.includes(cat.id);
+                                    return (
+                                      <button
+                                        key={cat.id}
+                                        type="button"
+                                        onClick={() => handleToggleItemCategory(item.id, cat.id)}
+                                        className={`admin-item-cat-pill ${isAssigned ? "active" : ""}`}
+                                        title={isAssigned ? `Quitar de ${cat.name}` : `Agregar a ${cat.name}`}
+                                      >
+                                        {isAssigned ? "✓ " : "+ "} {cat.name}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              <div className="admin-item-card-footer">
+                                <button 
+                                  className="admin-item-delete-btn" 
+                                  onClick={() => handleDeleteItem(item.id, item.name)}
+                                >
+                                  <FaTrash style={{ fontSize: '0.85rem' }} />
+                                  <span>Eliminar Arreglo</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => toggleItemExpanded(item.id)}
+                                  className="admin-btn-secondary"
+                                  style={{ padding: '0.45rem 0.95rem', fontSize: '0.85rem' }}
+                                >
+                                  <FaChevronUp /> Colapsar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          </>
         )}
-      </div>
+      </main>
     </div>
   );
 };
