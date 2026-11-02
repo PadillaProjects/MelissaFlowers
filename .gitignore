@@ -23,3 +23,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# large local backups (GitHub rejects files over 100 MB)
+assets_backup.zip
+*.zip

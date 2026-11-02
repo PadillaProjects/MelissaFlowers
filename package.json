@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
-    "update": "git add . && git commit -m 'Update site' && yarn deploy",
+    "update": "sh scripts/update.sh",
     "convert:webp": "node convertToWebP.js",
     "process:images": "node processImages.js"
   },
