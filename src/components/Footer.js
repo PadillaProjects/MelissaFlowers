@@ -69,7 +69,7 @@ const Footer = () => {
           {" · "}
           <a href="/terminos.html">Términos / Terms</a>
           {" · "}
-          <button type="button" className="footer-cookie-btn" onClick={reopenConsentBanner}>
+          <button type="button" className="footer-privacy-choices" onClick={reopenConsentBanner}>
             Cookies
           </button>
         </p>

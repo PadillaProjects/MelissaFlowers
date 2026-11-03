@@ -1,4 +1,4 @@
-.cookie-banner {
+.mb-choice-bar {
   position: fixed;
   left: 50%;
   bottom: 16px;
@@ -18,7 +18,7 @@
   color: var(--color-text-primary, #5a4a4a);
 }
 
-.cookie-text {
+.mb-choice-text {
   margin: 0;
   font-size: 0.88rem;
   line-height: 1.5;
@@ -26,23 +26,23 @@
   flex: 1;
 }
 
-.cookie-en {
+.mb-choice-en {
   color: var(--color-text-muted, #9a8a8a);
 }
 
-.cookie-text a {
+.mb-choice-text a {
   color: var(--color-primary-dark, #9d7373);
   white-space: nowrap;
 }
 
-.cookie-actions {
+.mb-choice-actions {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
 }
 
 /* Both choices look the same on purpose: declining is as easy as accepting. */
-.cookie-btn {
+.mb-choice-btn {
   font: inherit;
   font-size: 0.85rem;
   font-weight: 600;
@@ -55,16 +55,16 @@
   white-space: nowrap;
 }
 
-.cookie-btn:hover {
+.mb-choice-btn:hover {
   background: var(--color-accent-light, #e8d5ce);
 }
 
 @media (max-width: 600px) {
-  .cookie-banner {
+  .mb-choice-bar {
     flex-direction: column;
     align-items: stretch;
   }
-  .cookie-actions .cookie-btn {
+  .mb-choice-actions .mb-choice-btn {
     flex: 1;
   }
 }

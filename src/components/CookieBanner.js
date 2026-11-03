@@ -23,22 +23,22 @@ const CookieBanner = () => {
   if (!visible) return null;
 
   return (
-    <div className="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookies">
-      <p className="cookie-text">
+    <div className="mb-choice-bar" role="dialog" aria-live="polite" aria-label="Privacidad / Privacy">
+      <p className="mb-choice-text">
         <span lang="es">
           Usamos cookies de Google Analytics para saber cómo se usa nuestro sitio, solo si aceptas.
         </span>{" "}
-        <span lang="en" className="cookie-en">
+        <span lang="en" className="mb-choice-en">
           We use Google Analytics cookies to understand how our site is used, only if you accept.
         </span>{" "}
         <a href="/privacidad.html#cookies" target="_blank" rel="noopener noreferrer">
           Más información / Learn more
         </a>
       </p>
-      <div className="cookie-actions">
+      <div className="mb-choice-actions">
         <button
           type="button"
-          className="cookie-btn"
+          className="mb-choice-btn"
           onClick={() => {
             declineAnalytics();
             setVisible(false);
@@ -48,7 +48,7 @@ const CookieBanner = () => {
         </button>
         <button
           type="button"
-          className="cookie-btn"
+          className="mb-choice-btn"
           onClick={() => {
             acceptAnalytics();
             setVisible(false);
