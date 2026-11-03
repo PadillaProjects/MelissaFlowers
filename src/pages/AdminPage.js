@@ -3,11 +3,9 @@ import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { uploadImageToCloudinary } from "../services/cloudinary";
-import AdminOrdersManager from "../components/admin/AdminOrdersManager";
 import logoFull from "../assets/melibee-logo-full.png";
 import { 
   FaImages, 
-  FaShoppingBag, 
   FaSignOutAlt, 
   FaSearch, 
   FaTrash, 
@@ -45,7 +43,6 @@ const AdminPage = () => {
   // Data states
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
-  // const [bolisCategories, setBolisCategories] = useState([]);
   
   // Form states (Gallery)
   const [newItemName, setNewItemName] = useState("");
@@ -109,7 +106,7 @@ const AdminPage = () => {
       } else if (error.code === "auth/too-many-requests") {
         friendlyMessage = "Demasiados intentos fallidos. Espera unos minutos e inténtalo de nuevo.";
       } else if (error.code === "auth/unauthorized-domain") {
-        friendlyMessage = "Dominio no autorizado. Ingresa desde http://localhost:3000/#/admin";
+        friendlyMessage = "Dominio no autorizado. Ingresa desde http://localhost:3000/admin";
       } else if (error.message) {
         friendlyMessage = error.message;
       }
@@ -505,7 +502,7 @@ const AdminPage = () => {
             alt="Melibee Flowers" 
             className="admin-login-logo" 
           />
-          <h1 className="admin-login-title">Galería de Melissa</h1>
+          <h1 className="admin-login-title">Flowers by Melibee</h1>
           <p className="admin-login-subtitle">Panel de Control & Administración</p>
           
           <form onSubmit={handleLogin} className="admin-login-form">
@@ -566,7 +563,7 @@ const AdminPage = () => {
             </button>
           </form>
 
-          <a href="#/" className="admin-back-link">
+          <a href="/" className="admin-back-link">
             ← Volver a la Galería Pública
           </a>
         </div>
@@ -585,7 +582,7 @@ const AdminPage = () => {
           <div className="admin-brand">
             <img src={logoFull} alt="Logo" className="admin-brand-icon" />
             <div className="admin-brand-text">
-              <span className="admin-brand-name">Galería de Melissa</span>
+              <span className="admin-brand-name">Flowers by Melibee</span>
               <span className="admin-brand-badge">Panel de Control</span>
             </div>
           </div>
@@ -600,15 +597,6 @@ const AdminPage = () => {
               <FaImages />
               <span>Galería Floral</span>
             </button>
-            <button 
-              role="tab"
-              aria-selected={activeTab === "orders"}
-              className={`admin-tab-btn ${activeTab === "orders" ? "active" : ""}`}
-              onClick={() => setActiveTab("orders")}
-            >
-              <FaShoppingBag />
-              <span>Pedidos</span>
-            </button>
           </div>
 
           <div className="admin-nav-actions">
@@ -618,7 +606,7 @@ const AdminPage = () => {
             </span>
 
             <a 
-              href="#/" 
+              href="/" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="admin-btn-secondary"
@@ -650,9 +638,6 @@ const AdminPage = () => {
       </nav>
 
       <main className="admin-container">
-        {/* Orders Tab */}
-        {activeTab === 'orders' && <AdminOrdersManager />}
-
         {/* Gallery Management Tab */}
         {activeTab === 'gallery' && (
           <>

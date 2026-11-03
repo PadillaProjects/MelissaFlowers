@@ -287,3 +287,16 @@
     bottom: var(--spacing-lg);
   }
 }
+
+.cta-button.cta-secondary {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary-dark);
+  box-shadow: none;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-button.cta-secondary:hover {
+  background: var(--color-accent-light);
+}

@@ -6,7 +6,7 @@ import { FaFacebook } from "react-icons/fa";
 const Header = () => {
   return (
     <header className="header">
-      <h1 className="header-title">Galería de Flores</h1>
+      <h1 className="header-title">Flowers by Melibee</h1>
       <div className="header-contact">
         <p className="header-address"></p>
         <p className="header-address">El Paso, TX</p>

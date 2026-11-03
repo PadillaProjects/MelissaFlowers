@@ -3,7 +3,6 @@ import "./HomePage.css";
 import ItemCardContainer from "../components/ItemCardContainer";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
-// import BolisMenu from "../components/BolisMenu";
 // import ValentineBanner from "../components/ValentineBanner";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -12,7 +11,6 @@ import { getOptimizedUrl } from "../services/cloudinary";
 const HomePage = () => {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  // const [bolisCategories, setBolisCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -154,8 +152,6 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* Bolis section temporarily hidden */}
-      {/* <BolisMenu bolisCategories={bolisCategories} /> */}
 
       <Footer />
     </div>

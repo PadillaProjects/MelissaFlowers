@@ -1,7 +1,7 @@
 import React from "react";
-import { FaInstagram, FaFacebook, FaPhone, FaMapMarkerAlt, FaHeart } from "react-icons/fa";
-import { logEvent } from "firebase/analytics";
-import { analytics } from "../firebaseConfig";
+import { Link } from "react-router-dom";
+import { FaInstagram, FaFacebook, FaPhone, FaMapMarkerAlt, FaHeart, FaEnvelope } from "react-icons/fa";
+import { reopenConsentBanner, track } from "../analytics";
 import "./Footer.css";
 
 const Footer = () => {
@@ -9,22 +9,26 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-section">
-          <h3 className="footer-title">Galería de Melissa</h3>
+          <h3 className="footer-title">Flowers by Melibee</h3>
           <p className="footer-description">
-            Arreglos florales y más
+            Flores naturales y flores eternas de listón. Entrega a domicilio y recogida.
           </p>
         </div>
 
         <div className="footer-section">
           <h4 className="footer-heading">Contacto</h4>
           <div className="footer-links">
-            <a href="sms:9152074262" className="footer-link" onClick={() => { try { logEvent(analytics, 'click_contact', { method: 'sms' }); } catch (e) {} }}>
+            <a href="sms:9152074262" className="footer-link" onClick={() => { try { track('click_contact', { method: 'sms' }); } catch (e) {} }}>
               <FaPhone className="footer-icon" />
               <span>Text: 915-207-4262</span>
             </a>
+            <Link to="/contacto" className="footer-link">
+              <FaEnvelope className="footer-icon" />
+              <span>Conéctate con nosotros</span>
+            </Link>
             <div className="footer-link">
               <FaMapMarkerAlt className="footer-icon" />
-              <span>El Paso, TX</span>
+              <span>Canutillo · El Paso, TX</span>
             </div>
           </div>
         </div>
@@ -37,7 +41,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link social-link"
-              onClick={() => { try { logEvent(analytics, 'click_social', { platform: 'instagram', location: 'footer' }); } catch (e) {} }}
+              onClick={() => { try { track('click_social', { platform: 'instagram', location: 'footer' }); } catch (e) {} }}
             >
               <FaInstagram className="footer-icon" />
               <span>@melissa_soto3</span>
@@ -47,7 +51,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link social-link"
-              onClick={() => { try { logEvent(analytics, 'click_social', { platform: 'facebook', location: 'footer' }); } catch (e) {} }}
+              onClick={() => { try { track('click_social', { platform: 'facebook', location: 'footer' }); } catch (e) {} }}
             >
               <FaFacebook className="footer-icon" />
               <span>Flowers by Melibee</span>
@@ -59,6 +63,15 @@ const Footer = () => {
       <div className="footer-bottom">
         <p className="footer-copyright">
           Hecho con amor <FaHeart className="heart-icon" /> por Melissa © {new Date().getFullYear()}
+        </p>
+        <p className="footer-legal">
+          <a href="/privacidad.html">Privacidad / Privacy</a>
+          {" · "}
+          <a href="/terminos.html">Términos / Terms</a>
+          {" · "}
+          <button type="button" className="footer-cookie-btn" onClick={reopenConsentBanner}>
+            Cookies
+          </button>
         </p>
       </div>
     </footer>

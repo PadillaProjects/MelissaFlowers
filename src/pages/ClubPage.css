@@ -1,0 +1,214 @@
+.club-page {
+  min-height: 100vh;
+  background: var(--gradient-background);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2.5rem 1rem 4rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text-primary);
+}
+
+.club-card {
+  width: 100%;
+  max-width: 560px;
+  background: #fffaf7;
+  border: 1px solid var(--color-accent-light);
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 8px 30px rgba(157, 115, 115, 0.12);
+}
+
+.club-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.club-back {
+  color: var(--color-primary-dark);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.club-back:hover {
+  text-decoration: underline;
+}
+
+.club-done .club-back {
+  display: inline-block;
+  margin-top: 1.25rem;
+}
+
+.club-lang {
+  background: none;
+  border: 1px solid var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.club-lang:hover {
+  background: var(--color-accent-light);
+}
+
+.club-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  color: var(--color-primary-dark);
+  margin: 0.5rem 0 0.5rem;
+  text-align: left;
+}
+
+.club-intro {
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  margin: 0 0 1.5rem;
+  text-align: left;
+}
+
+.club-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+  text-align: left;
+  font-weight: 500;
+}
+
+.club-field em {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.club-field input {
+  font: inherit;
+  font-weight: 400;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--color-secondary-light);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-text-primary);
+}
+
+.club-field input:focus {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+.club-hint {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.club-error {
+  color: #a23b3b;
+  font-weight: 500;
+}
+
+.club-banner {
+  background: #fbeaea;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.club-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.club-consent {
+  border: none;
+  padding: 0;
+  margin: 1.5rem 0 0.75rem;
+  text-align: left;
+}
+
+.club-consent legend {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  padding: 0;
+}
+
+.club-check {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  line-height: 1.55;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.club-check input {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary-dark);
+  cursor: pointer;
+}
+
+.club-privacy {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-align: left;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.club-submit {
+  display: inline-block;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--gradient-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.club-submit:hover {
+  filter: brightness(0.95);
+}
+
+.club-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.club-wa {
+  background: #25a35a;
+  margin-top: 0.5rem;
+}
+
+.club-done .club-intro {
+  margin-bottom: 1rem;
+}
+
+.club-links {
+  font-size: 0.85rem;
+  text-align: left;
+  margin: -0.75rem 0 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.club-links a {
+  color: var(--color-primary-dark);
+}

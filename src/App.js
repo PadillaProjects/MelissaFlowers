@@ -1,24 +1,23 @@
 // App.js
 import React from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import AdminPage from "./pages/AdminPage";
-import SalePage from "./pages/SalePage";
-import CheckoutPage from "./pages/CheckoutPage";
-import { CartProvider } from "./context/CartContext";
+import ClubPage from "./pages/ClubPage";
+import CookieBanner from "./components/CookieBanner";
 
 const App = () => {
   return (
-    <CartProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/sale/:saleSlug" element={<SalePage />} />
-          <Route path="/sale/:saleSlug/checkout" element={<CheckoutPage />} />
-        </Routes>
-      </Router>
-    </CartProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/contacto" element={<ClubPage />} />
+        <Route path="/club" element={<ClubPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <CookieBanner />
+    </Router>
   );
 };
 
