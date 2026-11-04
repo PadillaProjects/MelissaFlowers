@@ -6,7 +6,7 @@ import { whatsappLink, GENERAL_MESSAGE } from "../catalog/arrangements";
 import mark from "../assets/melibee-mark-96.png";
 import "./SiteHeader.css";
 
-// Compact header that slides in once the big welcome logo has scrolled away.
+// Site header, fixed to the top on the home page.
 const SiteHeader = ({ visible = true, onLogoClick }) => {
   const scrollToArrangements = (e) => {
     const el = document.getElementById("arreglos");

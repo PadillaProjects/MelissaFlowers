@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useNavigationType, useSearchParams } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
@@ -17,26 +17,12 @@ const HomePage = () => {
   const { groups, featured, loading, error } = useCatalog();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigationType = useNavigationType();
-  const heroRef = useRef(null);
   const sectionRef = useRef(null);
-  const [pastHero, setPastHero] = useState(false);
 
   const filter = searchParams.get("tipo") || "todos";
   const activeGroups = filter === "todos" ? groups : groups.filter((g) => g.slug === filter);
   const shownGroups = activeGroups.length ? activeGroups : groups;
   const total = groups.reduce((n, g) => n + g.items.length, 0);
-
-  // Show the compact header once the welcome logo is out of view.
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el || !("IntersectionObserver" in window)) return undefined;
-    const io = new IntersectionObserver(
-      ([entry]) => setPastHero(!entry.isIntersecting),
-      { rootMargin: "-64px 0px 0px 0px" }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
 
   // Coming back from an arrangement: return to where the customer was.
   useEffect(() => {
@@ -68,10 +54,8 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <div ref={heroRef}>
-        <Hero />
-      </div>
-      <SiteHeader visible={pastHero} onLogoClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
+      <SiteHeader onLogoClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
+      <Hero />
 
       <section id="destacado" className="mb-intro" aria-labelledby="mb-intro-title">
         {featured && (
