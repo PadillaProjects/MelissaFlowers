@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { useConfirm } from "../components/admin/useConfirm";
+import DescriptionEditor from "../components/admin/DescriptionEditor";
+import OrderManager from "../components/admin/OrderManager";
 import { uploadImageToCloudinary } from "../services/cloudinary";
 import logoFull from "../assets/melibee-logo-full.png";
 import { 
@@ -24,10 +27,9 @@ import {
   FaTag,
   FaChevronDown,
   FaChevronUp,
-  FaArrowUp,
-  FaArrowDown,
   FaExpandAlt,
-  FaCompressAlt
+  FaCompressAlt,
+  FaListOl
 } from "react-icons/fa";
 import "./AdminPage.css";
 
@@ -58,7 +60,18 @@ const AdminPage = () => {
 
   const [uploading, setUploading] = useState(false);
   const [expandedItemIds, setExpandedItemIds] = useState([]);
-  const [savingOrder, setSavingOrder] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [notice, setNotice] = useState("");
+  const noticeTimer = useRef(null);
+  const [confirm, confirmDialog] = useConfirm();
+
+  // Short message at the bottom of the screen (replaces browser alerts,
+  // which some phones don't show).
+  const notify = useCallback((message) => {
+    setNotice(message);
+    clearTimeout(noticeTimer.current);
+    noticeTimer.current = setTimeout(() => setNotice(""), 4500);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -75,6 +88,7 @@ const AdminPage = () => {
       // Fetch Categories
       const catSnapshot = await getDocs(collection(db, "categories"));
       const catList = catSnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+      catList.sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
       setCategories(catList);
 
       // Fetch Items
@@ -129,29 +143,40 @@ const AdminPage = () => {
       await fetchData();
     } catch (error) {
       console.error("Error adding category:", error);
-      alert("Error al agregar la categoría.");
+      notify("Error al agregar la categoría.");
     }
   };
 
   const handleDeleteCategory = async (catId, catName) => {
-    if (!window.confirm(`¿Estás segura de eliminar la categoría "${catName}"?`)) return;
+    const ok = await confirm({
+      title: `¿Eliminar la categoría "${catName}"?`,
+      message: "Los arreglos no se borran; solo dejan de estar en esta categoría.",
+      confirmLabel: "Eliminar categoría",
+    });
+    if (!ok) return;
     try {
       await deleteDoc(doc(db, "categories", catId));
       await fetchData();
     } catch (error) {
       console.error("Error deleting category:", error);
-      alert("Error al eliminar la categoría.");
+      notify("Error al eliminar la categoría.");
     }
   };
 
-  const handleDeleteItem = async (id, itemName) => {
-    if (!window.confirm(`¿Estás segura de eliminar "${itemName || 'este arreglo'}" por completo?`)) return;
+  const handleDeleteItem = async (id, itemName, image) => {
+    const ok = await confirm({
+      title: `¿Eliminar "${itemName || "este arreglo"}"?`,
+      message: "Se quitará del sitio con todas sus fotos. Esto no se puede deshacer.",
+      confirmLabel: "Eliminar arreglo",
+      image,
+    });
+    if (!ok) return;
     try {
       await deleteDoc(doc(db, "items", id));
       await fetchData();
     } catch (error) {
       console.error("Error deleting item:", error);
-      alert("Error al eliminar el artículo.");
+      notify("Error al eliminar el artículo.");
     }
   };
 
@@ -179,7 +204,7 @@ const AdminPage = () => {
   const handleAddItem = async (e) => {
     e.preventDefault();
     if (!newItemName.trim() || imageFiles.length === 0) {
-      alert("Por favor ingresa el nombre del arreglo y selecciona al menos una imagen.");
+      notify("Por favor ingresa el nombre del arreglo y selecciona al menos una imagen.");
       return;
     }
 
@@ -210,10 +235,11 @@ const AdminPage = () => {
       imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
       setImagePreviews([]);
       await fetchData();
-      alert("¡Arreglo agregado exitosamente!");
+      setShowAddForm(false);
+      notify("¡Arreglo publicado en el sitio!");
     } catch (error) {
       console.error("Error adding item:", error);
-      alert("Error al agregar el arreglo.");
+      notify("Error al agregar el arreglo.");
     } finally {
       setUploading(false);
     }
@@ -238,21 +264,31 @@ const AdminPage = () => {
       fetchData();
     } catch (e) {
       console.error(e);
-      alert("Error al reordenar las imágenes.");
+      notify("Error al reordenar las imágenes.");
     }
   };
 
   const handleDeleteItemImage = async (item, index) => {
-    if (!window.confirm("¿Segura que deseas eliminar esta imagen?")) return;
     const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
+    if (urls.length <= 1) {
+      notify("Un arreglo necesita al menos una foto. Agrega otra antes de borrar esta.");
+      return;
+    }
+    const ok = await confirm({
+      title: "¿Eliminar esta foto?",
+      message: `Se quitará de "${item.name}".`,
+      confirmLabel: "Eliminar foto",
+      image: urls[index],
+    });
+    if (!ok) return;
     const newUrls = urls.filter((_, i) => i !== index);
     
     try {
-      await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls });
+      await updateDoc(doc(db, "items", item.id), { imageUrls: newUrls, imageUrl: newUrls[0] || "" });
       fetchData();
     } catch (e) {
       console.error(e);
-      alert("Error al eliminar la imagen.");
+      notify("Error al eliminar la imagen.");
     }
   };
 
@@ -270,13 +306,13 @@ const AdminPage = () => {
       fetchData();
     } catch (error) {
       console.error(error);
-      alert("Error al agregar imágenes al artículo.");
+      notify("Error al agregar imágenes al artículo.");
     } finally {
       setUploading(false);
     }
   };
 
-  const getItemCategoryIds = (item) => {
+  const getItemCategoryIds = useCallback((item) => {
     const ids = [];
     if (Array.isArray(item.categoryIds)) {
       ids.push(...item.categoryIds);
@@ -292,7 +328,7 @@ const AdminPage = () => {
       if (match && !ids.includes(match.id)) ids.push(match.id);
     }
     return ids;
-  };
+  }, [categories]);
 
   const handleToggleItemCategory = async (itemId, categoryId) => {
     const item = items.find(i => i.id === itemId);
@@ -327,64 +363,8 @@ const AdminPage = () => {
       });
     } catch (err) {
       console.error("Error updating categories:", err);
-      alert("Error al actualizar las categorías: " + err.message);
+      notify("Error al actualizar las categorías: " + err.message);
       await fetchData();
-    }
-  };
-
-  const handleRefillImages = async () => {
-    if (!window.confirm("Esto optimizará y subirá imágenes para los artículos existentes. ¿Deseas continuar?")) return;
-    setUploading(true);
-    try {
-      const itemsToUpdate = [
-        { name: "Amor Eterno", images: [require("../assets/webp/AmorEterno.webp"), require("../assets/webp/AmorEterno2.webp")] },
-        { name: "Brillo de Sol", images: [require("../assets/webp/BrilloDeSol1.webp"), require("../assets/webp/BrilloDeSol2.webp")] },
-        { name: "Canasta Festiva", images: [require("../assets/webp/CanastaFestiva.webp"), require("../assets/webp/CanastaFestiva2.webp")] },
-        { name: "Centro de Mesa", images: [require("../assets/webp/CentroDeMesa1.webp"), require("../assets/webp/CentroDeMesa2.webp")] },
-        { name: "Encanto Eterno", images: [require("../assets/webp/EncantoEterno1.webp"), require("../assets/webp/EncantoEterno2.webp"), require("../assets/webp/EncantoEterno3.webp")] },
-        { name: "Eventos", images: [require("../assets/webp/Eventos1.webp"), require("../assets/webp/Eventos2.webp"), require("../assets/webp/Eventos3.webp")] },
-        { name: "Flor Eterna Individual", images: [require("../assets/webp/FlorEternaIndividual1.webp"), require("../assets/webp/FlorEternaIndividual2.webp"), require("../assets/webp/FlorEternaIndividual3.webp")] },
-        { name: "Colores de Corazón", images: [require("../assets/webp/Gerveras1.webp"), require("../assets/webp/Gerveras2.webp")] },
-        { name: "Gerveras de Corazón", images: [require("../assets/webp/GerverasDeAmor1.webp"), require("../assets/webp/GerverasDeAmor2.webp")] },
-        { name: "Media Luna", images: [require("../assets/webp/MediaLuna1.webp"), require("../assets/webp/MediaLuna2.webp")] },
-        { name: "Pasión y Elegancia", images: [require("../assets/webp/PasionYElegancia.webp"), require("../assets/webp/PassionYElegancia2.webp")] },
-        { name: "Ramo de Amor de 25", images: [require("../assets/webp/RamoDeAmorDe25_1.webp"), require("../assets/webp/RamoDeAmorDe25_2.webp")] },
-        { name: "Ramo Lila", images: [require("../assets/webp/RamoLila1.webp"), require("../assets/webp/RamoLila2.webp"), require("../assets/webp/RamoLila3.webp")] },
-        { name: "Eterno Romance", images: [require("../assets/webp/Rosas1.webp"), require("../assets/webp/Rosas2.webp")] },
-        { name: "Rosas Eternas", images: [require("../assets/webp/RosasEternas1.webp"), require("../assets/webp/RosasEternas2.webp")] },
-        { name: "Rosas Eternas Con Caja Redonda", images: [require("../assets/webp/RosasEternasConCajaRedonda1.webp"), require("../assets/webp/RosasEternasConCajaRedonda2.webp")] },
-        { name: "Rosas y Tulipanes", images: [require("../assets/webp/RosasYTulipanes1.webp"), require("../assets/webp/RosasYTulipanes2.webp")] },
-        { name: "Sol Eterno", images: [require("../assets/webp/SolEterno.webp"), require("../assets/webp/SolEterno2.webp")] },
-        { name: "Sueño de Princesa", images: [require("../assets/webp/SuenoDePrincesa1.webp"), require("../assets/webp/SuenoDePrincesa2.webp")] }
-      ];
-
-      const itemsSnapshot = await getDocs(collection(db, "items"));
-      const currentItems = itemsSnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
-
-      for (const updateData of itemsToUpdate) {
-        const item = currentItems.find(i => i.name === updateData.name);
-        if (item) {
-          const uploadPromises = updateData.images.map(async (imgSrc, index) => {
-            const response = await fetch(imgSrc);
-            const blob = await response.blob();
-            const file = new File([blob], `${item.name.replace(/\s+/g, '')}${index}.webp`, { type: 'image/webp' });
-            return uploadImageToCloudinary(file);
-          });
-          const newImageUrls = await Promise.all(uploadPromises);
-          await updateDoc(doc(db, "items", item.id), {
-            imageUrls: newImageUrls,
-            imageUrl: newImageUrls[0]
-          });
-        }
-      }
-      
-      alert("¡Todas las imágenes han sido sincronizadas y optimizadas!");
-      fetchData();
-    } catch (error) {
-      console.error("Error refilling images:", error);
-      alert("Error al procesar las imágenes.");
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -401,60 +381,6 @@ const AdminPage = () => {
 
   const handleCollapseAll = () => {
     setExpandedItemIds([]);
-  };
-
-  // Reordering items within the selected category
-  const handleMoveItemOrder = async (itemId, direction) => {
-    if (filterCategory === "all" || filterCategory === "uncategorized") {
-      alert("Por favor selecciona una categoría específica en el filtro superior para ordenar los arreglos.");
-      return;
-    }
-
-    const selectedCat = categories.find(c => c.id === filterCategory);
-    if (!selectedCat) return;
-
-    // All items that currently belong to this category
-    const catItems = items.filter(i => getItemCategoryIds(i).includes(filterCategory));
-    const existingOrder = Array.isArray(selectedCat.itemOrder) ? selectedCat.itemOrder : [];
-
-    // Assemble current full order: existing valid IDs first, then any unranked category items
-    const currentOrder = [
-      ...existingOrder.filter(id => catItems.some(i => i.id === id)),
-      ...catItems.filter(i => !existingOrder.includes(i.id)).map(i => i.id)
-    ];
-
-    const currentIndex = currentOrder.indexOf(itemId);
-    if (currentIndex === -1) return;
-
-    const targetIndex = currentIndex + direction;
-    if (targetIndex < 0 || targetIndex >= currentOrder.length) return;
-
-    // Swap elements
-    const newOrder = [...currentOrder];
-    const temp = newOrder[currentIndex];
-    newOrder[currentIndex] = newOrder[targetIndex];
-    newOrder[targetIndex] = temp;
-
-    // Optimistic state update
-    setCategories(prev => prev.map(c => 
-      c.id === filterCategory ? { ...c, itemOrder: newOrder } : c
-    ));
-
-    setSavingOrder(true);
-    try {
-      await updateDoc(doc(db, "categories", filterCategory), {
-        itemOrder: newOrder
-      });
-    } catch (err) {
-      console.error("Error saving category order:", err);
-      alert("No se pudo guardar el nuevo orden. Inténtalo de nuevo.");
-      // Revert optimistic state
-      setCategories(prev => prev.map(c => 
-        c.id === filterCategory ? { ...c, itemOrder: existingOrder } : c
-      ));
-    } finally {
-      setSavingOrder(false);
-    }
   };
 
   // Filtered & Sorted Items for Manage Items Section
@@ -597,6 +523,15 @@ const AdminPage = () => {
               <FaImages />
               <span>Galería Floral</span>
             </button>
+            <button 
+              role="tab"
+              aria-selected={activeTab === "order"}
+              className={`admin-tab-btn ${activeTab === "order" ? "active" : ""}`}
+              onClick={() => setActiveTab("order")}
+            >
+              <FaListOl />
+              <span>Orden en la tienda</span>
+            </button>
           </div>
 
           <div className="admin-nav-actions">
@@ -615,15 +550,6 @@ const AdminPage = () => {
               <FaExternalLinkAlt style={{ fontSize: '0.8rem' }} />
               <span>Ver Tienda</span>
             </a>
-
-            <button 
-              onClick={handleRefillImages} 
-              disabled={uploading} 
-              className="admin-btn-secondary"
-              title="Resincronizar imágenes WebP"
-            >
-              {uploading ? "Procesando..." : "Sincronizar"}
-            </button>
 
             <button 
               onClick={handleLogout} 
@@ -679,14 +605,23 @@ const AdminPage = () => {
             {/* Creation Grid: Add Item + Manage Categories */}
             <div className="admin-grid-two-col">
               {/* Form: Add Gallery Item */}
-              <section className="admin-card">
-                <div className="admin-card-header">
-                  <h2 className="admin-card-title">
-                    <FaPlus /> Nuevo Arreglo Floral
-                  </h2>
-                </div>
+              <section className={`admin-card admin-add-card ${showAddForm ? "is-open" : ""}`}>
+                <h2 className="admin-card-title admin-add-heading">
+                  <button
+                    type="button"
+                    className="admin-add-toggle"
+                    aria-expanded={showAddForm}
+                    aria-controls="admin-add-form"
+                    onClick={() => setShowAddForm(v => !v)}
+                  >
+                    <span className="admin-add-toggle-icon" aria-hidden="true"><FaPlus /></span>
+                    <span>Agregar nuevo arreglo</span>
+                    {showAddForm ? <FaChevronUp aria-hidden="true" /> : <FaChevronDown aria-hidden="true" />}
+                  </button>
+                </h2>
 
-                <form onSubmit={handleAddItem}>
+                {showAddForm && (
+                <form id="admin-add-form" onSubmit={handleAddItem}>
                   <div className="admin-form-group">
                     <label className="admin-form-label" htmlFor="new-item-name">Nombre del Arreglo *</label>
                     <input 
@@ -788,6 +723,7 @@ const AdminPage = () => {
                     {uploading ? "Subiendo fotos y guardando..." : "Publicar Arreglo en Galería"}
                   </button>
                 </form>
+                )}
               </section>
 
               {/* Card: Manage Categories */}
@@ -907,24 +843,12 @@ const AdminPage = () => {
                 </div>
               </div>
 
-              {/* Category Reordering Guide Banner */}
-              {filterCategory !== "all" && filterCategory !== "uncategorized" ? (
-                <div className="admin-order-banner active">
-                  <span className="admin-order-banner-icon">✨</span>
-                  <div className="admin-order-banner-text">
-                    <strong>Ordenando categoría "{categories.find(c => c.id === filterCategory)?.name}":</strong>
-                    <span> Usa las flechas <strong>↑</strong> y <strong>↓</strong> para definir el orden en la tienda. Se guarda automáticamente.</span>
-                  </div>
-                  {savingOrder && <span className="admin-order-saving-pill">Guardando...</span>}
+              <div className="admin-order-banner hint">
+                <span className="admin-order-banner-icon"><FaListOl /></span>
+                <div className="admin-order-banner-text">
+                  <span>Para cambiar el orden en que aparecen en el sitio, usa la pestaña <button type="button" className="admin-btn-link" onClick={() => setActiveTab("order")}>Orden en la tienda</button>.</span>
                 </div>
-              ) : (
-                <div className="admin-order-banner hint">
-                  <span className="admin-order-banner-icon">💡</span>
-                  <div className="admin-order-banner-text">
-                    <span>Selecciona una categoría específica en el filtro superior para ordenar la posición de sus arreglos en la tienda.</span>
-                  </div>
-                </div>
-              )}
+              </div>
 
               {filteredItems.length === 0 ? (
                 <div className="admin-empty-state">
@@ -933,11 +857,10 @@ const AdminPage = () => {
                 </div>
               ) : (
                 <div className="admin-items-list">
-                  {filteredItems.map((item, idx) => {
+                  {filteredItems.map((item) => {
                     const urls = item.imageUrls || (item.imageUrl ? [item.imageUrl] : []);
                     const assignedCatIds = getItemCategoryIds(item);
                     const isExpanded = expandedItemIds.includes(item.id);
-                    const isCategorySelected = filterCategory !== "all" && filterCategory !== "uncategorized";
 
                     return (
                       <article 
@@ -959,38 +882,6 @@ const AdminPage = () => {
                           }}
                         >
                           <div className="admin-item-header-left">
-                            {/* Reorder controls (when specific category chosen) */}
-                            {isCategorySelected && (
-                              <div 
-                                className="admin-item-order-controls" 
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <span className="admin-item-rank-badge">#{idx + 1}</span>
-                                <div className="admin-order-arrows">
-                                  <button 
-                                    type="button"
-                                    className="admin-order-btn"
-                                    disabled={idx === 0 || savingOrder}
-                                    onClick={() => handleMoveItemOrder(item.id, -1)}
-                                    title="Mover hacia arriba"
-                                    aria-label={`Mover ${item.name} hacia arriba`}
-                                  >
-                                    <FaArrowUp />
-                                  </button>
-                                  <button 
-                                    type="button"
-                                    className="admin-order-btn"
-                                    disabled={idx === filteredItems.length - 1 || savingOrder}
-                                    onClick={() => handleMoveItemOrder(item.id, 1)}
-                                    title="Mover hacia abajo"
-                                    aria-label={`Mover ${item.name} hacia abajo`}
-                                  >
-                                    <FaArrowDown />
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-
                             {/* Arrangement Thumbnail Preview */}
                             <div className="admin-item-avatar-wrap">
                               {urls[0] ? (
@@ -1091,12 +982,7 @@ const AdminPage = () => {
 
                             {/* Details: Description & Multi-Category Selection */}
                             <div className="admin-item-body-details">
-                              {item.description && (
-                                <div className="admin-item-desc-box">
-                                  <span className="admin-item-section-label">Descripción:</span>
-                                  <p className="admin-item-desc">{item.description}</p>
-                                </div>
-                              )}
+                              <DescriptionEditor item={item} onSaved={fetchData} notify={notify} />
 
                               <div className="admin-item-cats-section">
                                 <span className="admin-item-section-label">Categorías (asigna una o más):</span>
@@ -1121,7 +1007,7 @@ const AdminPage = () => {
                               <div className="admin-item-card-footer">
                                 <button 
                                   className="admin-item-delete-btn" 
-                                  onClick={() => handleDeleteItem(item.id, item.name)}
+                                  onClick={() => handleDeleteItem(item.id, item.name, urls[0])}
                                 >
                                   <FaTrash style={{ fontSize: '0.85rem' }} />
                                   <span>Eliminar Arreglo</span>
@@ -1146,7 +1032,21 @@ const AdminPage = () => {
             </section>
           </>
         )}
+        {activeTab === 'order' && (
+          <OrderManager
+            categories={categories}
+            items={items}
+            getItemCategoryIds={getItemCategoryIds}
+            onSaved={fetchData}
+            notify={notify}
+          />
+        )}
       </main>
+
+      {confirmDialog}
+      <div className={`admin-toast ${notice ? "is-visible" : ""}`} role="status" aria-live="polite">
+        {notice}
+      </div>
     </div>
   );
 };

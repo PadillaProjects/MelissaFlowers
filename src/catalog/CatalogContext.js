@@ -34,7 +34,12 @@ export const CatalogProvider = ({ children }) => {
   useEffect(() => {
     const unsubCategories = onSnapshot(
       collection(db, "categories"),
-      (snap) => setCategories(snap.docs.map((d) => ({ ...d.data(), id: d.id }))),
+      (snap) => {
+        // Order chosen in /admin → "Orden en la tienda"; unordered ones go last.
+        const list = snap.docs.map((d) => ({ ...d.data(), id: d.id }));
+        list.sort((x, y) => (x.order ?? 999) - (y.order ?? 999));
+        setCategories(list);
+      },
       (err) => console.error("Error listening to categories:", err)
     );
     const unsubItems = onSnapshot(
