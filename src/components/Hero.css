@@ -46,7 +46,16 @@
   font-size: var(--font-size-sm);
 }
 
+.hero-header-phone {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .hero-facebook {
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -233,7 +242,7 @@
   .hero {
     min-height: 100vh;
     padding: var(--spacing-md);
-    padding-top: 180px; /* Extra space for header on mobile */
+    padding-top: 220px; /* Extra space for header on mobile */
   }
 
   .hero-header {
@@ -252,12 +261,12 @@
 
   .hero-header-address,
   .hero-header-phone {
-    font-size: clamp(0.75rem, 3vw, 0.875rem);
+    font-size: 0.9rem;
   }
 
   .hero-facebook {
-    font-size: clamp(0.75rem, 3vw, 0.875rem);
-    padding: 6px var(--spacing-sm);
+    font-size: 0.9rem;
+    padding: 0 var(--spacing-sm);
     gap: 4px;
   }
 

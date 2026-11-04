@@ -27,8 +27,11 @@
 }
 
 .club-back {
-  color: var(--color-primary-dark);
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--mb-rosa);
+  font-size: 0.95rem;
   text-decoration: none;
 }
 
@@ -46,8 +49,9 @@
   border: 1px solid var(--color-primary-light);
   color: var(--color-primary-dark);
   border-radius: 999px;
-  padding: 0.3rem 0.9rem;
-  font-size: 0.85rem;
+  min-height: 44px;
+  padding: 0 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
@@ -153,9 +157,9 @@
 
 .club-check input {
   flex: 0 0 auto;
-  width: 1.15rem;
-  height: 1.15rem;
-  margin-top: 0.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.05rem;
   accent-color: var(--color-primary-dark);
   cursor: pointer;
 }

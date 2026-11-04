@@ -1,0 +1,123 @@
+.mb-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  height: var(--mb-header-h);
+  background: rgba(251, 247, 245, 0.96);
+  border-bottom: 1px solid var(--mb-line);
+  transform: translateY(-100%);
+  visibility: hidden;
+  transition: transform 220ms ease, visibility 0s linear 220ms;
+}
+
+.mb-header.is-visible {
+  transform: translateY(0);
+  visibility: visible;
+  transition: transform 220ms ease, visibility 0s;
+}
+
+.mb-header-inner {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 8px 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mb-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--mb-ink);
+}
+
+.mb-header-brand:hover {
+  color: var(--mb-ink);
+}
+
+.mb-header-brand img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.mb-header-brand span {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mb-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mb-header-link {
+  display: none;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  color: var(--mb-ink);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.mb-header-link:hover {
+  color: var(--mb-rosa);
+}
+
+.mb-header-wa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  color: var(--mb-ink);
+}
+
+.mb-header-wa:hover {
+  color: var(--mb-rosa);
+  background: var(--mb-rosa-tint);
+}
+
+.mb-header-wa-text {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .mb-header-inner {
+    padding: 0 24px;
+  }
+
+  .mb-header-link {
+    display: inline-flex;
+  }
+
+  .mb-header-wa {
+    width: auto;
+    padding: 0 18px;
+    background: var(--mb-rosa);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .mb-header-wa:hover {
+    background: var(--mb-rosa-dark);
+    color: #fff;
+  }
+
+  .mb-header-wa-text {
+    display: inline;
+  }
+}

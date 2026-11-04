@@ -178,3 +178,203 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #d4a5a5;
 }
+
+/* ==========================================================================
+   Mobile redesign (2026-11): tokens and shared pieces
+   ========================================================================== */
+:root {
+  --mb-ground: #fbf7f5;
+  --mb-ink: #3d2329;
+  --mb-ink-soft: #6e5157;
+  --mb-rosa: #8c5560;
+  --mb-rosa-dark: #6e3f49;
+  --mb-rosa-tint: #f2e3e5;
+  --mb-line: #eadbdd;
+  --mb-leaf: #3f5b3a;
+  --mb-leaf-tint: #e4ece1;
+  --mb-header-h: 60px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--mb-rosa);
+  outline-offset: 2px;
+}
+
+.mb-visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 20px;
+  border-radius: 26px;
+  border: 1.5px solid transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.mb-btn--primary {
+  background: var(--mb-rosa);
+  border-color: var(--mb-rosa);
+  color: #fff;
+}
+
+.mb-btn--primary:hover {
+  background: var(--mb-rosa-dark);
+  border-color: var(--mb-rosa-dark);
+  color: #fff;
+}
+
+.mb-btn--outline {
+  background: transparent;
+  border-color: var(--mb-rosa);
+  color: var(--mb-rosa);
+}
+
+.mb-btn--outline:hover {
+  background: var(--mb-rosa-tint);
+  color: var(--mb-rosa-dark);
+}
+
+.mb-btn--quiet {
+  min-height: 48px;
+  background: transparent;
+  color: var(--mb-rosa);
+}
+
+.mb-btn--quiet:hover {
+  color: var(--mb-rosa-dark);
+  background: var(--mb-rosa-tint);
+}
+
+.mb-btn--square {
+  width: 52px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mb-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mb-ink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mb-icon-btn:hover {
+  background: var(--mb-rosa-tint);
+}
+
+.mb-icon-btn--float {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(30, 18, 22, 0.18);
+}
+
+.mb-icon-btn--float:hover {
+  background: #fff;
+  color: var(--mb-rosa);
+}
+
+.mb-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mb-chip-row--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.mb-chip-row--scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  border: 1.5px solid #e0cbcf;
+  background: #fff;
+  color: var(--mb-ink);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mb-chip:hover {
+  border-color: var(--mb-rosa);
+}
+
+.mb-chip[aria-pressed="true"] {
+  background: var(--mb-rosa);
+  border-color: var(--mb-rosa);
+  color: #fff;
+}
+
+.mb-chip-count {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.mb-tag {
+  align-self: flex-start;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--mb-leaf);
+  background: var(--mb-leaf-tint);
+  padding: 6px 12px;
+  border-radius: 14px;
+}
+
+.mb-tag--ribbon {
+  color: var(--mb-rosa-dark);
+  background: var(--mb-rosa-tint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -9,7 +9,7 @@ import logoFull from "../assets/melibee-logo-full.png";
 const Hero = () => {
   const scrollToGallery = () => {
     try { track('click_navigation', { destination: 'gallery' }); } catch (e) {}
-    const gallery = document.getElementById("gallery");
+    const gallery = document.getElementById("destacado");
     if (gallery) {
       gallery.scrollIntoView({ behavior: "smooth" });
     }
@@ -33,7 +33,7 @@ const Hero = () => {
         <h1 className="hero-header-title">Flowers by Melibee</h1>
         <div className="hero-header-contact">
           <p className="hero-header-address">Canutillo · El Paso, TX</p>
-          <p className="hero-header-phone">Text: 915-207-4262</p>
+          <a className="hero-header-phone" href="sms:+19152074262" onClick={() => { try { track('click_contact', { method: 'sms', location: 'hero' }); } catch (e) {} }}>Text: 915-207-4262</a>
           <a
             className="hero-facebook"
             href="https://www.facebook.com/people/%F0%9D%99%B5%F0%9D%9A%95%F0%9D%9A%98%F0%9D%9A%A0%F0%9D%9A%8E%F0%9D%9A%9B%F0%9D%9A%9C-%F0%9D%9A%8B%F0%9D%9A%A2-%F0%9D%95%84%F0%9D%95%96%F0%9D%95%9D%F0%9D%95%9A%F0%9D%95%93%F0%9D%95%96%F0%9D%95%96/61578006152375/"

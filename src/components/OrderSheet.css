@@ -1,0 +1,155 @@
+.mb-sheet-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.mb-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 18, 22, 0.55);
+  animation: mb-fade 200ms ease;
+}
+
+.mb-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow-y: auto;
+  background: #fff;
+  color: var(--mb-ink);
+  border-radius: 24px 24px 0 0;
+  padding: 8px 20px calc(20px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: mb-rise 240ms ease;
+}
+
+@media (min-width: 720px) {
+  .mb-sheet-layer {
+    align-items: center;
+  }
+
+  .mb-sheet {
+    border-radius: 24px;
+    padding-bottom: 24px;
+  }
+
+  .mb-sheet-handle {
+    display: none;
+  }
+}
+
+@keyframes mb-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mb-rise {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.mb-sheet-handle {
+  align-self: center;
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: #e0cbcf;
+}
+
+.mb-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.mb-sheet-head > div {
+  flex: 1;
+}
+
+.mb-sheet-head .mb-icon-btn {
+  margin: -6px -10px 0 0;
+}
+
+.mb-sheet-title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+
+.mb-sheet-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--mb-ink-soft);
+}
+
+.mb-sheet-field {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.mb-sheet-field legend {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.mb-sheet-date {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.mb-sheet-date input {
+  height: 48px;
+  padding: 0 12px;
+  border: 1.5px solid #e0cbcf;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--mb-ink);
+  background: #fff;
+}
+
+.mb-sheet-preview {
+  background: #eef4ea;
+  border-radius: 16px 16px 16px 4px;
+  padding: 14px 16px;
+}
+
+.mb-sheet-preview-label {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--mb-leaf);
+}
+
+.mb-sheet-preview-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #22301f;
+  overflow-wrap: anywhere;
+}
+
+.mb-sheet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
