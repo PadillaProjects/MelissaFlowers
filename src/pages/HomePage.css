@@ -108,7 +108,7 @@
   z-index: 50;
   margin: 0 -16px;
   padding: 10px 16px;
-  background: rgba(251, 247, 245, 0.96);
+  background: var(--mb-ground);
   border-bottom: 1px solid var(--mb-line);
 }
 
