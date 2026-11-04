@@ -14,7 +14,7 @@ import {
 import { track } from "../analytics";
 
 const HomePage = () => {
-  const { groups, loading, error } = useCatalog();
+  const { groups, featured, loading, error } = useCatalog();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigationType = useNavigationType();
   const heroRef = useRef(null);
@@ -25,7 +25,6 @@ const HomePage = () => {
   const activeGroups = filter === "todos" ? groups : groups.filter((g) => g.slug === filter);
   const shownGroups = activeGroups.length ? activeGroups : groups;
   const total = groups.reduce((n, g) => n + g.items.length, 0);
-  const featured = groups[0]?.items[0];
 
   // Show the compact header once the welcome logo is out of view.
   useEffect(() => {

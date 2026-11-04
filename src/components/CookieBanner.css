@@ -68,3 +68,10 @@
     flex: 1;
   }
 }
+
+/* On arrangement pages, sit above the sticky "Pedir por WhatsApp" bar. */
+@media (max-width: 899px) {
+  body.mb-has-order-bar .mb-choice-bar {
+    bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}

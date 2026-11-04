@@ -108,7 +108,10 @@ export const CatalogProvider = ({ children }) => {
     }
 
     const bySlug = new Map(items.map((it) => [it.slug, it]));
-    return { items, groups, bySlug, loading: !itemsLoaded, error };
+    // Photo under the welcome logo: an item marked `featured: true`,
+    // otherwise the first arrangement of the first category.
+    const featured = items.find((it) => it.featured === true) || groups[0]?.items[0] || null;
+    return { items, groups, bySlug, featured, loading: !itemsLoaded, error };
   }, [rawItems, categories, itemsLoaded, error]);
 
   return <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>;

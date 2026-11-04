@@ -81,6 +81,12 @@ const ArrangementPage = () => {
 
   const closeSheet = useCallback(() => setSheetOpen(false), []);
 
+  // Lets the cookie notice sit above the sticky order bar on phones.
+  useEffect(() => {
+    document.body.classList.add("mb-has-order-bar");
+    return () => document.body.classList.remove("mb-has-order-bar");
+  }, []);
+
   if (!item) {
     return (
       <main className="mb-arr-missing">
@@ -98,6 +104,8 @@ const ArrangementPage = () => {
   }
 
   const lead = leadTimeFor(item);
+  const showDescription =
+    item.description && item.description.trim().toLowerCase() !== (item.name || "").trim().toLowerCase();
   const related = items
     .filter((it) => it.kind === item.kind && it.id !== item.id)
     .slice(0, 8);
@@ -106,6 +114,12 @@ const ArrangementPage = () => {
 
   return (
     <div className="mb-arr-page">
+      <div className="mb-arr-backbar">
+        <button type="button" className="mb-arr-back" onClick={goBack}>
+          <FiArrowLeft size={20} aria-hidden="true" />
+          Volver a los arreglos
+        </button>
+      </div>
       <main className="mb-arr">
         <section className="mb-arr-gallery" aria-roledescription="carrusel" aria-label={`Fotos de ${item.name}`}>
           <div className="mb-arr-track" ref={trackRef} onScroll={onScroll} tabIndex={-1}>
@@ -121,7 +135,7 @@ const ArrangementPage = () => {
           </div>
 
           <div className="mb-arr-topbar">
-            <button type="button" className="mb-icon-btn mb-icon-btn--float" onClick={goBack} aria-label="Volver a los arreglos">
+            <button type="button" className="mb-icon-btn mb-icon-btn--float mb-arr-back-float" onClick={goBack} aria-label="Volver a los arreglos">
               <FiArrowLeft size={22} aria-hidden="true" />
             </button>
             <button type="button" className="mb-icon-btn mb-icon-btn--float" onClick={share} aria-label="Compartir este arreglo">
@@ -173,7 +187,7 @@ const ArrangementPage = () => {
             {item.kind === "ribbon" ? "Flores eternas de listón" : "Flores naturales"}
           </span>
           <h1 className="mb-arr-title">{item.name}</h1>
-          {item.description && <p className="mb-arr-desc">{item.description}</p>}
+          {showDescription && <p className="mb-arr-desc">{item.description}</p>}
           <p className="mb-arr-price">{item.price ? `Precio: ${item.price}` : "Precio: pregúntanos por WhatsApp"}</p>
 
           <ul className="mb-arr-facts">
