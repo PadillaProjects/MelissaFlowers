@@ -5,7 +5,7 @@
   right: 0;
   z-index: 900;
   height: var(--mb-header-h);
-  background: rgba(251, 247, 245, 0.96);
+  background: var(--mb-ground);
   border-bottom: 1px solid var(--mb-line);
   transform: translateY(-100%);
   visibility: hidden;

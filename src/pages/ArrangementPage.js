@@ -7,7 +7,7 @@ import {
 } from "react-icons/fi";
 import { useCatalog } from "../catalog/CatalogContext";
 import {
-  arrangementUrl, leadTimeFor, smsLink, DELIVERY_AREAS,
+  arrangementUrl, leadTimeFor, DELIVERY_AREAS,
 } from "../catalog/arrangements";
 import ArrangementCard from "../components/ArrangementCard";
 import OrderSheet from "../components/OrderSheet";
@@ -24,6 +24,7 @@ const ArrangementPage = () => {
 
   const [index, setIndex] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [preferred, setPreferred] = useState("whatsapp");
   const [shareNote, setShareNote] = useState("");
   const trackRef = useRef(null);
 
@@ -110,7 +111,6 @@ const ArrangementPage = () => {
     .filter((it) => it.kind === item.kind && it.id !== item.id)
     .slice(0, 8);
   const photos = item.images;
-  const textMessage = `Hola, me interesa el arreglo "${item.name}" (${arrangementUrl(item)}).`;
 
   return (
     <div className="mb-arr-page">
@@ -188,7 +188,7 @@ const ArrangementPage = () => {
           </span>
           <h1 className="mb-arr-title">{item.name}</h1>
           {showDescription && <p className="mb-arr-desc">{item.description}</p>}
-          <p className="mb-arr-price">{item.price ? `Precio: ${item.price}` : "Precio: pregúntanos por WhatsApp"}</p>
+          <p className="mb-arr-price">{item.price ? `Precio: ${item.price}` : "Precio: pregúntanos"}</p>
 
           <ul className="mb-arr-facts">
             <li>
@@ -206,18 +206,27 @@ const ArrangementPage = () => {
           </ul>
 
           <div className="mb-arr-cta">
-            <button type="button" className="mb-btn mb-btn--primary" onClick={() => setSheetOpen(true)}>
-              <FaWhatsapp size={20} aria-hidden="true" />
-              Pedir por WhatsApp
-            </button>
-            <a
-              className="mb-btn mb-btn--outline mb-btn--square"
-              href={smsLink(textMessage)}
-              aria-label="Pedir por mensaje de texto"
-              onClick={() => { try { track("click_order", { method: "sms", item_name: item.name }); } catch (e) {} }}
-            >
-              <FiMessageSquare size={20} aria-hidden="true" />
-            </a>
+            <p className="mb-arr-cta-label">Pídelo por</p>
+            <div className="mb-arr-cta-buttons">
+              <button
+                type="button"
+                className="mb-btn mb-btn--primary"
+                aria-label="Pedir por WhatsApp"
+                onClick={() => { setPreferred("whatsapp"); setSheetOpen(true); }}
+              >
+                <FaWhatsapp size={20} aria-hidden="true" />
+                WhatsApp
+              </button>
+              <button
+                type="button"
+                className="mb-btn mb-btn--ink"
+                aria-label="Pedir por mensaje de texto"
+                onClick={() => { setPreferred("sms"); setSheetOpen(true); }}
+              >
+                <FiMessageSquare size={19} aria-hidden="true" />
+                Texto
+              </button>
+            </div>
           </div>
 
           {related.length > 0 && (
@@ -234,7 +243,7 @@ const ArrangementPage = () => {
       </main>
 
       <Footer />
-      <OrderSheet item={item} open={sheetOpen} onClose={closeSheet} />
+      <OrderSheet item={item} open={sheetOpen} onClose={closeSheet} preferred={preferred} />
     </div>
   );
 };

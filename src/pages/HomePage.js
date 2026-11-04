@@ -95,15 +95,19 @@ const HomePage = () => {
 
         {groups.length > 1 && (
           <div className="mb-filter-bar">
-            <div className="mb-chip-row mb-chip-row--scroll" role="group" aria-label="Filtrar por tipo">
-              <button type="button" className="mb-chip" aria-pressed={filter === "todos"} onClick={() => pickFilter("todos")}>
+            <div
+              className={groups.length <= 3 ? "mb-seg" : "mb-chip-row mb-chip-row--scroll"}
+              role="group"
+              aria-label="Filtrar por tipo"
+            >
+              <button type="button" className={groups.length <= 3 ? "mb-seg-btn" : "mb-chip"} aria-pressed={filter === "todos"} onClick={() => pickFilter("todos")}>
                 Todos <span className="mb-chip-count">{total}</span>
               </button>
               {groups.map((g) => (
                 <button
                   key={g.id}
                   type="button"
-                  className="mb-chip"
+                  className={groups.length <= 3 ? "mb-seg-btn" : "mb-chip"}
                   aria-pressed={filter === g.slug}
                   onClick={() => pickFilter(g.slug)}
                 >
