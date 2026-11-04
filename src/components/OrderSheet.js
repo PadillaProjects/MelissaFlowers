@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import { FiX, FiMessageSquare } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import { track } from "../analytics";
 import { arrangementUrl, smsLink, whatsappLink } from "../catalog/arrangements";
 import "./OrderSheet.css";
@@ -30,11 +30,12 @@ const todayIso = () => {
 };
 
 // Bottom sheet that writes the WhatsApp/SMS message for the customer.
-const OrderSheet = ({ item, open, onClose, preferred = "whatsapp" }) => {
+const OrderSheet = ({ item, open, onClose }) => {
   const [when, setWhen] = useState("week");
   const [date, setDate] = useState("");
   const [how, setHow] = useState("delivery");
   const sheetRef = useRef(null);
+  const closeRef = useRef(null);
 
   const message = useMemo(() => {
     const whenText =
@@ -49,7 +50,7 @@ const OrderSheet = ({ item, open, onClose, preferred = "whatsapp" }) => {
     const previouslyFocused = document.activeElement;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    sheetRef.current?.focus();
+    closeRef.current?.focus();
 
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -95,18 +96,16 @@ const OrderSheet = ({ item, open, onClose, preferred = "whatsapp" }) => {
         aria-modal="true"
         aria-labelledby="mb-sheet-title"
         ref={sheetRef}
-        tabIndex={-1}
       >
         <div className="mb-sheet-handle" aria-hidden="true" />
         <div className="mb-sheet-head">
-          <img className="mb-sheet-thumb" src={item.images[0].webp} alt="" />
           <div>
             <h2 id="mb-sheet-title" className="mb-sheet-title">Pedir {item.name}</h2>
             <p className="mb-sheet-sub">
-              Escríbenos por WhatsApp o mensaje de texto. Te dejamos el mensaje listo y puedes cambiarlo antes de enviarlo.
+              Te abrimos WhatsApp con este mensaje. Puedes cambiarlo antes de enviarlo.
             </p>
           </div>
-          <button type="button" className="mb-icon-btn mb-sheet-close" onClick={onClose} aria-label="Cerrar">
+          <button type="button" className="mb-icon-btn" onClick={onClose} aria-label="Cerrar" ref={closeRef}>
             <FiX size={22} aria-hidden="true" />
           </button>
         </div>
@@ -156,7 +155,7 @@ const OrderSheet = ({ item, open, onClose, preferred = "whatsapp" }) => {
           <p className="mb-sheet-preview-text" aria-live="polite">{message}</p>
         </div>
 
-        <div className={`mb-sheet-actions${preferred === "sms" ? " is-sms-first" : ""}`}>
+        <div className="mb-sheet-actions">
           <a
             className="mb-btn mb-btn--primary"
             href={whatsappLink(message)}
@@ -165,11 +164,10 @@ const OrderSheet = ({ item, open, onClose, preferred = "whatsapp" }) => {
             onClick={() => sent("whatsapp")}
           >
             <FaWhatsapp size={20} aria-hidden="true" />
-            WhatsApp
+            Abrir WhatsApp
           </a>
-          <a className="mb-btn mb-btn--ink" href={smsLink(message)} onClick={() => sent("sms")}>
-            <FiMessageSquare size={19} aria-hidden="true" />
-            Mensaje de texto
+          <a className="mb-btn mb-btn--quiet" href={smsLink(message)} onClick={() => sent("sms")}>
+            Mejor por mensaje de texto
           </a>
         </div>
       </div>

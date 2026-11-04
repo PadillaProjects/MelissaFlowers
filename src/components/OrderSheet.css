@@ -10,9 +10,7 @@
 .mb-sheet-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(30, 18, 22, 0.5);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
+  background: rgba(30, 18, 22, 0.55);
   animation: mb-fade 200ms ease;
 }
 
@@ -39,11 +37,8 @@
   }
 
   .mb-sheet {
-    max-width: 480px;
     border-radius: 24px;
-    padding: 28px;
-    gap: 20px;
-    box-shadow: 0 24px 60px rgba(30, 18, 22, 0.3);
+    padding-bottom: 24px;
   }
 
   .mb-sheet-handle {
@@ -75,38 +70,18 @@
   gap: 8px;
 }
 
-.mb-sheet:focus {
-  outline: none;
-}
-
-.mb-sheet-head {
-  align-items: center;
-  gap: 14px;
-}
-
 .mb-sheet-head > div {
   flex: 1;
-  min-width: 0;
 }
 
-.mb-sheet-thumb {
-  width: 64px;
-  height: 64px;
-  border-radius: 14px;
-  object-fit: cover;
-  flex-shrink: 0;
-  align-self: flex-start;
-}
-
-.mb-sheet-close {
-  align-self: flex-start;
-  margin: -8px -10px 0 0;
+.mb-sheet-head .mb-icon-btn {
+  margin: -6px -10px 0 0;
 }
 
 .mb-sheet-title {
   font-family: var(--font-heading);
   font-weight: 500;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   line-height: 1.2;
   margin: 0 0 4px;
 }
@@ -174,22 +149,7 @@
 }
 
 .mb-sheet-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.mb-sheet-actions .mb-btn {
-  padding: 0 12px;
-  white-space: nowrap;
-}
-
-.mb-sheet-actions.is-sms-first .mb-btn--ink {
-  order: -1;
-}
-
-@media (max-width: 359px) {
-  .mb-sheet-actions {
-    grid-template-columns: 1fr;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
