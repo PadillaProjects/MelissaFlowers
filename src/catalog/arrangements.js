@@ -23,6 +23,8 @@ export const smsLink = (text) =>
   `sms:+${BUSINESS_PHONE}?&body=${encodeURIComponent(text)}`;
 
 export const GENERAL_MESSAGE = "Hola, quiero información sobre sus arreglos.";
+export const CUSTOM_ARRANGEMENT_MESSAGE =
+  "Hola Melissa, me gustaría cotizar un arreglo personalizado. Aquí te comparto la foto de referencia:";
 
 // A category whose name mentions "etern" or "listón" holds ribbon flowers.
 export const isRibbonCategory = (category) => {

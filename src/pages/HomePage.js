@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useNavigationType, useSearchParams } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
-import { FiChevronRight } from "react-icons/fi";
+import { FiChevronRight, FiCamera, FiMessageSquare, FiCheck } from "react-icons/fi";
 import "./HomePage.css";
 import Hero from "../components/Hero";
 import SiteHeader from "../components/SiteHeader";
@@ -9,7 +9,7 @@ import ArrangementCard, { HOME_SCROLL_KEY } from "../components/ArrangementCard"
 import Footer from "../components/Footer";
 import { useCatalog } from "../catalog/CatalogContext";
 import {
-  arrangementPath, categoryNote, whatsappLink, GENERAL_MESSAGE,
+  arrangementPath, categoryNote, whatsappLink, smsLink, GENERAL_MESSAGE, CUSTOM_ARRANGEMENT_MESSAGE,
 } from "../catalog/arrangements";
 import { track } from "../analytics";
 
@@ -18,6 +18,7 @@ const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigationType = useNavigationType();
   const sectionRef = useRef(null);
+  const customRef = useRef(null);
 
   const filter = searchParams.get("tipo") || "todos";
   const activeGroups = filter === "todos" ? groups : groups.filter((g) => g.slug === filter);
@@ -55,6 +56,11 @@ const HomePage = () => {
 
   const scrollToArrangements = () => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToCustom = () => {
+    customRef.current?.scrollIntoView({ behavior: "smooth" });
+    try { track("click_navigation", { destination: "custom_section" }); } catch (e) {}
   };
 
   return (
@@ -103,6 +109,17 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      <div className="mb-custom-cta">
+        <button type="button" className="mb-custom-cta-btn" onClick={scrollToCustom}>
+          <FiCamera size={18} aria-hidden="true" />
+          <span>
+            <strong>Pedidos personalizados</strong>
+            <small>Mándanos tu foto de referencia</small>
+          </span>
+          <FiChevronRight size={18} aria-hidden="true" className="mb-custom-cta-chev" />
+        </button>
+      </div>
 
       <section id="arreglos" ref={sectionRef} className="mb-gallery" aria-labelledby="mb-gallery-title">
         <h2 id="mb-gallery-title" className="mb-visually-hidden">Arreglos</h2>
@@ -153,6 +170,84 @@ const HomePage = () => {
             </div>
           </div>
         ))}
+      </section>
+
+      <section id="personalizados" ref={customRef} className="mb-custom" aria-labelledby="mb-custom-title">
+        <div className="mb-custom-card">
+          <div className="mb-custom-header">
+            <span className="mb-tag mb-tag--ribbon mb-custom-tag">
+              Diseño personalizado · Custom Orders
+            </span>
+            <h2 id="mb-custom-title" className="mb-custom-title">
+              ¿Buscas un arreglo personalizado?
+            </h2>
+            <p className="mb-custom-desc">
+              ¿Tienes en mente un diseño especial o viste un arreglo que te gustó? Mándanos una foto por WhatsApp o mensaje de texto (SMS) y con gusto te decimos si podemos prepararlo, qué flores hay disponibles y cuánto costaría.
+            </p>
+            <p className="mb-custom-sub-en">
+              Looking for something custom? Send us a photo by WhatsApp or text and we'll confirm availability and give you a quote.
+            </p>
+          </div>
+
+          <div className="mb-custom-steps">
+            <div className="mb-custom-step">
+              <span className="mb-custom-step-icon" aria-hidden="true">
+                <FiCamera size={20} />
+              </span>
+              <div className="mb-custom-step-text">
+                <strong>1. Elige tu foto</strong>
+                <span>Cualquier diseño o idea que te inspire</span>
+              </div>
+            </div>
+            <div className="mb-custom-step">
+              <span className="mb-custom-step-icon" aria-hidden="true">
+                <FiMessageSquare size={20} />
+              </span>
+              <div className="mb-custom-step-text">
+                <strong>2. Mándanos un mensaje</strong>
+                <span>Por WhatsApp o SMS al <span className="mb-nowrap">915-207-4262</span></span>
+              </div>
+            </div>
+            <div className="mb-custom-step">
+              <span className="mb-custom-step-icon" aria-hidden="true">
+                <FiCheck size={20} />
+              </span>
+              <div className="mb-custom-step-text">
+                <strong>3. Te confirmamos</strong>
+                <span>Te respondemos con disponibilidad y cotización</span>
+              </div>
+            </div>
+          </div>
+
+          <p className="mb-custom-note">
+            Escríbenos con anticipación: los arreglos de listón necesitan al menos 1 semana y las flores naturales dependen de disponibilidad.
+          </p>
+
+          <div className="mb-custom-actions">
+            <a
+              className="mb-btn mb-btn--primary"
+              href={whatsappLink(CUSTOM_ARRANGEMENT_MESSAGE)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                try { track("click_contact", { method: "whatsapp", location: "custom_section" }); } catch (e) {}
+              }}
+            >
+              <FaWhatsapp size={20} aria-hidden="true" />
+              <span>WhatsApp (915-207-4262)</span>
+            </a>
+            <a
+              className="mb-btn mb-btn--ink"
+              href={smsLink(CUSTOM_ARRANGEMENT_MESSAGE)}
+              onClick={() => {
+                try { track("click_contact", { method: "sms", location: "custom_section" }); } catch (e) {}
+              }}
+            >
+              <FiMessageSquare size={19} aria-hidden="true" />
+              <span>Mensaje de texto / SMS</span>
+            </a>
+          </div>
+        </div>
       </section>
 
       <Footer />
