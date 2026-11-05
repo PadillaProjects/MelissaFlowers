@@ -10,6 +10,12 @@ if (window.location.hash.startsWith("#/")) {
   window.history.replaceState(null, "", window.location.hash.slice(1));
 }
 
+// Disable browser's automatic scroll restoration so React Router transitions
+// start at the top of the new page instead of being clamped to the previous scroll position (footer).
+if ("scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

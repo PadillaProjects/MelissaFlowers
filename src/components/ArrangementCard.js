@@ -20,6 +20,9 @@ const ArrangementCard = ({ item, compact = false, onOpen }) => {
           try { sessionStorage.setItem(HOME_SCROLL_KEY, String(window.scrollY)); } catch (e) {}
         }
         try { track("select_item", { item_name: item.name }); } catch (e) {}
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
         if (onOpen) onOpen(item);
       }}
     >

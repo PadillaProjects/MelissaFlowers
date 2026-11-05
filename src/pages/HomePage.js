@@ -30,7 +30,12 @@ const HomePage = () => {
     let saved = null;
     try { saved = sessionStorage.getItem(HOME_SCROLL_KEY); } catch (e) {}
     if (navigationType === "POP" && saved) {
-      requestAnimationFrame(() => window.scrollTo({ top: Number(saved), behavior: "instant" }));
+      requestAnimationFrame(() => {
+        const top = Number(saved);
+        window.scrollTo(0, top);
+        document.documentElement.scrollTop = top;
+        document.body.scrollTop = top;
+      });
     }
     try { sessionStorage.removeItem(HOME_SCROLL_KEY); } catch (e) {}
   }, [loading, navigationType]);
@@ -59,7 +64,16 @@ const HomePage = () => {
 
       <section id="destacado" className="mb-intro" aria-labelledby="mb-intro-title">
         {featured && (
-          <Link to={arrangementPath(featured)} className="mb-intro-photo">
+          <Link
+            to={arrangementPath(featured)}
+            className="mb-intro-photo"
+            onClick={() => {
+              try { sessionStorage.setItem(HOME_SCROLL_KEY, String(window.scrollY)); } catch (e) {}
+              window.scrollTo(0, 0);
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }}
+          >
             <img src={featured.images[0].large} alt={featured.name} />
             <span className="mb-intro-pill">
               {featured.name}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import {
@@ -29,12 +29,21 @@ const ArrangementPage = () => {
   const trackRef = useRef(null);
 
   // New arrangement: start at the top, first photo.
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     setIndex(0);
     setSheetOpen(false);
     if (trackRef.current) trackRef.current.scrollLeft = 0;
-  }, [slug]);
+
+    const rafId = requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [slug, item?.id]);
 
   useEffect(() => {
     if (!item) return undefined;

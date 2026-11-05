@@ -89,7 +89,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Note: avoid global scroll-behavior: smooth as it breaks SPA route transitions
+     and causes pages to open at the footer. In-page smooth scrolls specify { behavior: 'smooth' } explicitly. */
 }
 
 body {
